@@ -259,6 +259,10 @@ let controller = {
             if (usernameValidation) {
               if (studentUname.length == 11) {
                 usernameValidation = true;
+               let checkUsername = eventQuery.checkUser(studentUname); 
+               if(checkUsername.rows[0].userCount > 0){
+                usernameValidation=false;    
+               }
               } else {
                 usernameValidation = false;
               }
@@ -445,6 +449,13 @@ let controller = {
         let checkRollNo = await eventQuery.checkStudentRollNo(rollNo);
         if(checkRollNo.rows[0].rollcount > 0){
           return res.json({message:'Roll No Should Be Unique !!'})
+        }
+
+        console.log('username ',studUsername)
+        let checkUsername = await eventQuery.checkUser(studUsername);
+        console.log("username :::: " , checkUsername)
+        if(checkUsername.rows[0].usercount > 0){
+          return res.json({message:'Username Should Be Unique !!'})
         }
 
         manualArray.push({
