@@ -68,7 +68,7 @@ static async deleteCourseProgram(subjectId,programs,placeholders){
 
 static getAllCourseProgram(subId){
  let query= {
-  text: `select p.program_name from subject_program_mapping s inner join program_master p on s.program_lid = p.program_id 
+  text: `select p.program_id,p.program_name from subject_program_mapping s inner join program_master p on s.program_lid = p.program_id 
          where s.subject_lid = $1 and s.active = true and p.active =true;`,
   values:[subId]  
  }

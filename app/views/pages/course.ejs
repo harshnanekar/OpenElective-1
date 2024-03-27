@@ -462,7 +462,8 @@
       </select>
       </select>
       <label style="margin-top:10px;" for="coursePrograms">Programs</label></br>
-      <select class="form-control" id="coursePrograms" multiple></select>
+
+       <div id="coursePrograms" class="form-control" style="overflow: auto; height: 200px; " ></div>
     </div>`;
 
         let mbody = document.getElementById('getModal');
@@ -478,14 +479,14 @@
           if (response.status === 'error') {
             window.location.href = `${response.redirectTo}`;
           }else{
-            // programList= response.programs;
-            // let courseProgram = document.getElementById('coursePrograms');
-            // Array.from(programList).forEach(course => {
-            //     let option = `<option><input type="checkbox" />${course.program_name}</option>`;
+            programList= response.programs;
+            let courseProgram = document.getElementById('coursePrograms');
+            Array.from(programList).forEach(course => {
+                let option = `<label><input data-programId=${course.program_id} type="checkbox" class="programListArray" />&ensp;${course.program_name}</label></br>`;
 
-            //     console.log("courses programs ", course.program_name)
-            //     courseProgram.insertAdjacentHTML('beforeEnd', option);
-            //   })
+                console.log("courses programs ", course.program_name)
+                courseProgram.insertAdjacentHTML('beforeEnd', option);
+              })
 
           } 
         })
@@ -497,16 +498,20 @@
               window.location.href = `${response.redirectTo}`;
             } else {
 
+              let programListArray = document.querySelectorAll('.programListArray');
+              console.log("courses programs ", programListArray)
               let courseProgram = document.getElementById('coursePrograms');
-              let programs = response.coursePrograms;
+               let programs = response.coursePrograms;
 
-              Array.from(programs).forEach(course => {
-                let option = `<option>${course.program_name}</option>`;
+              Array.from(programListArray).forEach(data => {
+               let programId = data.getAttribute('data-programId');
 
-                console.log("courses programs ", course.program_name)
-                courseProgram.insertAdjacentHTML('beforeEnd', option);
+               Array.from(programs).forEach(prg => {
+                if(programId === prg.program_id){
+                  data.setAttribute('checked','checked')
+                }
+               })
               })
-
 
             }
           })
