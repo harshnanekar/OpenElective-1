@@ -6,7 +6,7 @@ const {redisDb} = require("../config/database.js");
 const path = require('path');
 const student = require("./student.js");
 const emailController = require("../controller/email.js");
-
+const os = require('os');
 
 
 
@@ -396,6 +396,8 @@ let controller = {
         acadSession,
       } = req.body;
 
+      console.log('req body ',JSON.stringify(req.body) )
+
       console.log('manually function')
       const validationPromises = [
         validation.fnameValidation(fname),
@@ -450,10 +452,12 @@ let controller = {
         if(checkUsername.rows[0].usercount > 0){
           return res.json({message:'Username Should Be Unique !!'})
         }
+        console.log('roll no. ',rollNo)
+        let rollNoVal = rollNo!= ' ' ? validation.rollNoValidation(rollNo) : undefined;
 
-        let rollNoVal = rollNo!= undefined ? validation.rollNoValidation(rollNo) : undefined;
+        console.log('roll val ',rollNoVal)
          
-       if(rollNoVal != undefined){ 
+       if(rollNoVal!=undefined){ 
         studentArray.push({
           studentFirstName,
           studentLastName,
@@ -471,7 +475,7 @@ let controller = {
           });
         }else{
           rollNo = null;
-
+          console.log('roll no ' , rollNo)
           studentArray.push({
           studentFirstName,
           studentLastName,
@@ -738,7 +742,7 @@ let controller = {
   adminAllocatingEvents: async (req, res) => {
     try {
       let { eventId } = req.body;
-      let result = await eventQuery.adminAllocatingEvents(eventId);
+      let result = await eventQuery.adminAllocateEvents(eventId);
 
       if (result.rowCount > 0) {
         return res.json({

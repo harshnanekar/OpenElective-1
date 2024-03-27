@@ -231,8 +231,6 @@ module.exports = {
       let getStudentsList = await query.getStudents();
       let rowlength = getStudentsList.rowCount;
 
-      console.log('view students ', JSON.stringify(getStudentsList.rows));
-
       return res.render("viewRegisteredStudents", {
         module: modules,
         students: getStudentsList.rows,

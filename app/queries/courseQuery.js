@@ -13,6 +13,15 @@ static insertCourse(subjectName,departMentName,batchNo,maxCapacityPerBatch,minCa
  return pgPool.query(query);
 }
 
+static updateSubjectProgram(subjectId,programId,username){
+       let query={
+        text:`update subject_program_mapping set program_lid=$1,modifiedby=$2,modified_date=now(),active=true
+        where subject_lid=$3 and program_lid=$4`,
+        values:[programId,username,subjectId,programId]  
+       }
+       return pgPool.query(query);
+ }
+
 static getCourses(username){
  let query={
   text: `SELECT s.sub_id, s.subject_name,COALESCE(c.campus_name, 'No Campus Assigned') AS campus_name,s.open_to_allprograms,s.dept_name,s.max_capacity_per_batch,s.min_capacity_per_batch,s.batches,s.campus_lid
@@ -87,8 +96,8 @@ static updateCourse(subName,deptName,batches,capacity,minBatch,campus,username,s
 
 static async checkCourseWithProgram(subId,program){
  let query ={
-  text: `select count(*) from subject_program_mapping where subject_lid=$1 and 
-         program_lid in (select program_id from program_master where program_name=$2 and active=true) and active=true `,
+  text: `select count(*) as subjectCount from subject_program_mapping where subject_lid=$1 and 
+         program_lid in ($2) and active=true `,
   values:[subId,program]            
  }
  return pgPool.query(query);       
@@ -96,7 +105,7 @@ static async checkCourseWithProgram(subId,program){
 
 static async getProgramId(program,username){
   let query = {
-   text:`select program_id from program_master where program_name=$1 and active=true and createdby =$2`,
+   text:`select program_id from program_master where program_id=$1 and active=true and createdby =$2`,
    values:[program,username]     
   }    
   return pgPool.query(query);  

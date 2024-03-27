@@ -49,7 +49,7 @@
          <td><%= data.username %></td>
          <td><%= data.campus_name %></td>
          <td><%= data.current_session %></td>
-        <% if (data.rollno != null ){ %>
+        <% if (data.rollno != null || data.rollno === ' '){ %>
           <td><%= data.rollno %></td>
         <% }else{  %>
           <td>Roll No. Not Assigned</td> 

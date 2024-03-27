@@ -97,12 +97,12 @@ const query = class EventQuery{
 
   }
 
-  static adminAllocatingEvents(eventId){
-   let query = {
-    text:`select new_course_allocation($1)`,
-    values:[parseInt(eventId)]
-   } 
-   return pgPool.query(query);
+  static async adminAllocateEvents(eventId){
+    let query = {
+      text:`select new_course_allocation($1)`,
+      values:[parseInt(eventId)]
+    }
+    return pgPool.query(query)
   }
 
   static getAllocationReport(eventId){
