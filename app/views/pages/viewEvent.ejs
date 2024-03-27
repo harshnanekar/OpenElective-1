@@ -429,7 +429,8 @@ document.addEventListener('click',(e) => {
     let obj = {eventId};
     console.log(obj)
     let modalLoader = document.getElementById('modalLoader');
-    let htmlPage = `<h2 style="text-align: center;">Sending Mail To Students</h2>`;
+    let htmlPage = `<div style="display:flex;flex-direction:column;justify-content:center;"><h2 style="text-align: center;">Sending Mail To Students</h2>
+                    <button class="btn btn-danger mt-4 okloader" >Ok</button></div>`;
     modalLoader.innerHTML = htmlPage;
 
     let loader = document.querySelector('.loading');
@@ -442,13 +443,17 @@ document.addEventListener('click',(e) => {
       if(response.status === 'error'){
       window.location.href=`${response.redirectTo}`;
       }else{
-        loader.style.display='none';
-        let msg = document.getElementById('msgModal');
-        let modalPage = `<div><h4 style="text-align:center;">${response.message}</h4></div>`
-        msg.innerHTML = modalPage;
-        document.querySelector('[data-target="#messageModal"]').click();
+        // loader.style.display='none';
+        // let msg = document.getElementById('msgModal');
+        // let modalPage = `<div><h4 style="text-align:center;">${response.message}</h4></div>`
+        // msg.innerHTML = modalPage;
+        // document.querySelector('[data-target="#messageModal"]').click();
       }
     })
+  }
+  if(e.target.classList.contains('okloader')){
+    let loader = document.querySelector('.loading');
+    loader.style.display='none';
   }
 
 })
