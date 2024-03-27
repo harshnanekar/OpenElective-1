@@ -743,6 +743,7 @@ let controller = {
     try {
       let eventId = req.query.id;
       let allocationData = await eventQuery.getAllocationReport(eventId);
+      console.log('allocation data ',allocationData.rowCount)
 
       if (allocationData.rowCount > 0) {
         let file = "D:/AllocationReport.xlsx";
