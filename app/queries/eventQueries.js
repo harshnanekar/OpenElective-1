@@ -150,6 +150,14 @@ const query = class EventQuery{
     return pgPool.query(query);
   }
 
+  static checkUser(studentUname){
+    let query ={
+      text:`select count(*) as userCount from user_info where username=$1 and active=true`,
+      values:[studentUname]
+    }
+    return pgPool.query(query);
+  }
+
 
 }
 
