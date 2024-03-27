@@ -308,15 +308,19 @@
 
         let fnameVal = fnameValidation(fname);
         let lnameVal = lnameValidation(lname);
-        let rollNoVal = rollNoValidation(rollNo);
+        let rollNoVal = rollNo != undefined ? rollNoValidation(rollNo) : true;
         let campusVal = campusValidation(campus);
         let unameVal = unameValidation(studUsername);
         let yearVal = acadYearValidation(acadYear);
         let sessionVal = acadSessionValidation(acadSession);
 
         if (fnameVal && lnameVal && rollNoVal && campusVal && unameVal && yearVal && sessionVal) {
-
-          let obj = { fname, lname, rollNo, campus, studUsername, acadYear, acadSession };
+          let obj;
+          if(rollNo != undefined){
+           obj = { fname, lname, rollNo, campus, studUsername, acadYear, acadSession };
+          }else{
+           obj = { fname, lname, undefined, campus, studUsername, acadYear, acadSession };
+          }
           let loader=document.querySelector('.overlay');
           loader.style.display = 'block';
 
@@ -332,10 +336,7 @@
                 let msg = document.getElementById('msgModal');
                 let modalPage = `<div><h4 style="text-align:center;">${responseData.message}</h4></div>`
                 msg.innerHTML = modalPage;
-                document.querySelector('[data-target="#messageModal"]').click();
-
-                
-                
+                document.querySelector('[data-target="#messageModal"]').click();         
               }
             });
         }
@@ -408,8 +409,6 @@
 
       let inputrollNo = document.getElementById('rollNoError');
 
-      if (rollNo.length > 0) {
-
         let rollNoVal = specialCharacterValidation(rollNo);
 
         if (rollNoVal) {
@@ -424,7 +423,7 @@
           } 
         }
 
-        if (hasNumber == rollNo.length) {
+        if (hasNumber == rollNo.length && hasNumber != 0) {
           inputrollNo.innerText = '*Roll number must contain both letters and numbers';
           return false;
         } else {
@@ -437,10 +436,7 @@
           return rollNoVal;
 
         }
-      } else {
-        inputrollNo.innerText = '*Required';
-        return false;
-      }
+    
     }
 
     //Campus Validation

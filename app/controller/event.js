@@ -390,10 +390,11 @@ let controller = {
         acadSession,
       } = req.body;
 
+      console.log('manually function')
       const validationPromises = [
         validation.fnameValidation(fname),
         validation.lnameValidation(lname),
-        validation.rollNoValidation(rollNo),
+        // validation.rollNoValidation(rollNo),
         validation.campusValidation(campus),
         validation.newAcadYearValidation(acadYear),
         validation.acadSessionValidation(acadSession),
@@ -403,7 +404,6 @@ let controller = {
       const [
         fnameVal,
         lnameVal,
-        rollNoVal,
         campusVal,
         acadYearVal,
         sessionVal,
@@ -411,17 +411,16 @@ let controller = {
       ] = await Promise.all(validationPromises);
       console.log(
         "Validate----roll ",
-        rollNoVal,
         campusVal,
         acadYearVal,
         sessionVal
       );
-      let manualArray = [];
+      let studentArray = [];
 
       if (
         fnameVal &&
         lnameVal &&
-        rollNoVal &&
+        // rollNoVal &&
         campusVal &&
         acadYearVal &&
         sessionVal &&
@@ -435,7 +434,7 @@ let controller = {
           "Validated rightly",
           fnameVal,
           lnameVal,
-          rollNoVal,
+          // rollNoVal,
           campusVal,
           acadYearVal,
           sessionVal,
@@ -449,7 +448,10 @@ let controller = {
           return res.json({message:'Username Should Be Unique !!'})
         }
 
-        manualArray.push({
+        let rollNoVal = rollNo!= undefined ? validation.rollNoValidation(rollNo) : undefined;
+         
+       if(rollNoVal != undefined){ 
+        studentArray.push({
           studentFirstName,
           studentLastName,
           rollNo,
@@ -459,10 +461,29 @@ let controller = {
           acadSession,
           username,
         });
+      }else{
+        if(!rollNoVal){
+          return res.json({
+            message: "Invalid Credentials !!",
+          });
+        }else{
+          studentArray.push({
+          studentFirstName,
+          studentLastName,
+          campus,
+          studentUname,
+          acadYear,
+          acadSession,
+          username,
+        });
+      }
+      }
+
+      console.log('manual array ', JSON.stringify(studentArray))
 
         if (user_role === "Role_Admin") {
           let registerManually = await eventQuery.registerStudentExcel({
-            studentData: manualArray,
+            studentArray
           });
 
           if (registerManually.rowCount > 0) {
