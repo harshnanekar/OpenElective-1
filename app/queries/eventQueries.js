@@ -42,10 +42,11 @@ const query = class EventQuery{
   }
 
   static async registerStudentExcel (studentData){
-      
+    
+  console.log("studentData : ",studentData);
   let queries ={
     text: `select register_student($1)`,
-    values: [JSON.stringify(studentData.studentData)]
+    values: [JSON.stringify(studentData.studentArray)]
   }
 
   return pgPool.query(queries);

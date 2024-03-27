@@ -500,12 +500,12 @@
               let courseProgram = document.getElementById('coursePrograms');
               let programs = response.coursePrograms;
 
-              // Array.from(programs).forEach(course => {
-              //   let option = `<option>${course.program_name}</option>`;
+              Array.from(programs).forEach(course => {
+                let option = `<option>${course.program_name}</option>`;
 
-              //   console.log("courses programs ", course.program_name)
-              //   courseProgram.insertAdjacentHTML('beforeEnd', option);
-              // })
+                console.log("courses programs ", course.program_name)
+                courseProgram.insertAdjacentHTML('beforeEnd', option);
+              })
 
 
             }

@@ -251,72 +251,64 @@ let controller = {
               excelCampus != undefined ? excelCampus.trim() : undefined;
             let rollNo = excelRoll != undefined ? excelRoll.trim() : undefined;
 
-            let usernameValidation =
-              studentUname != undefined
-                ? validation.NumberValidation(studentUname)
-                : false;
+            // let usernameValidation =
+            //   studentUname != undefined
+            //     ? validation.NumberValidation(studentUname)
+            //     : false;
 
-            if (usernameValidation) {
-              if (studentUname.length == 11) {
-                usernameValidation = true;
-               let checkUsername = await eventQuery.checkUser(studentUname); 
-               console.log('checkUsername ',checkUsername)
+            // if (usernameValidation) {
+            //   if (studentUname.length == 11) {
+            //     usernameValidation = true;
+            //    let checkUsername = await eventQuery.checkUser(studentUname); 
+            //    console.log('checkUsername ',checkUsername)
 
-               if(checkUsername.rows[0].userCount > 0){
-                usernameValidation=false;    
-               }
-              } else {
-                usernameValidation = false;
-              }
-            }
+            //    if(checkUsername.rows[0].userCount > 0){
+            //     usernameValidation=false;    
+            //    }
+            //   } else {
+            //     usernameValidation = false;
+            //   }
+            // }
 
-            let firstNameValidation =
-              studentFirstName != undefined
-                ? validation.fnameValidation(studentFirstName)
-                : false;
-            let lastNameValidation =
-              studentLastName != undefined
-                ? validation.lnameValidation(studentLastName)
-                : false;
-            let sessionValidation =
-              acadSession != undefined
-                ? validation.acadSessionValidation(acadSession)
-                : false;
-            let yearValidation =
-              acadYear != undefined
-                ? validation.newAcadYearValidation(acadYear)
-                : false;
-            let campusValidation =
-              campus != undefined ? validation.campusValidation(campus) : false;
-            let rollValidation =
-              rollNo != undefined ? validation.rollNoValidation(rollNo) : false;
+            // let firstNameValidation =
+            //   studentFirstName != undefined
+            //     ? validation.fnameValidation(studentFirstName)
+            //     : false;
+            // let lastNameValidation =
+            //   studentLastName != undefined
+            //     ? validation.lnameValidation(studentLastName)
+            //     : false;
+            // let sessionValidation =
+            //   acadSession != undefined
+            //     ? validation.acadSessionValidation(acadSession)
+            //     : false;
+            // let yearValidation =
+            //   acadYear != undefined
+            //     ? validation.newAcadYearValidation(acadYear)
+            //     : false;
+            // let campusValidation =
+            //   campus != undefined ? validation.campusValidation(campus) : false;
+            // let rollValidation =
+            //   rollNo != undefined ? validation.rollNoValidation(rollNo) : false;
 
-            console.log("validations ", yearValidation);
+            // console.log("validations ", usernameValidation,
+            // firstNameValidation ,
+            // lastNameValidation ,
+            // sessionValidation ,
+            // yearValidation,
+            // campusValidation, 
+            // rollValidation);
 
-            if (
-              usernameValidation &&
-              firstNameValidation &&
-              lastNameValidation &&
-              sessionValidation &&
-              yearValidation &&
-              campusValidation &&
-              rollValidation
-            ) {
+            // if (
+            //   usernameValidation &&
+            //   firstNameValidation &&
+            //   lastNameValidation &&
+            //   sessionValidation &&
+            //   yearValidation &&
+            //   campusValidation &&
+            //   rollValidation
+            // ) {
 
-              let checkRollNo = await eventQuery.checkStudentRollNo(rollNo);
-              console.log('checkRollno ',checkRollNo)
-              if(checkRollNo.rows[0].rollcount > 0){
-                emptyStudentArray.push({
-                  studentUname,
-                  studentFirstName,
-                  studentLastName,
-                  acadSession,
-                  acadYear,
-                  campus,
-                  rollNo,
-                  username,
-                });
-              }else{
               studentArray.push({
                 studentUname,
                 studentFirstName,
@@ -327,27 +319,28 @@ let controller = {
                 rollNo,
                 username,
               });
-              console.log("Array found--- ", studentArray);
-            }
-            } else {
-              console.log("Array not found empty");
-              emptyStudentArray.push({
-                studentUname,
-                studentFirstName,
-                studentLastName,
-                acadSession,
-                acadYear,
-                campus,
-                rollNo,
-                username,
-              });
-            }
-          });
+            })
+          //     console.log("Array found--- ", studentArray);
+            
+          //   } else {
+          //     console.log("Array not found empty");
+          //     emptyStudentArray.push({
+          //       studentUname,
+          //       studentFirstName,
+          //       studentLastName,
+          //       acadSession,
+          //       acadYear,
+          //       campus,
+          //       rollNo,
+          //       username,
+          //     });
+          //   }
+          // });
+
+          console.log("studentArray :::::::::::::::::::::::",studentArray);
 
           if (user_role === "Role_Admin") {
-            let registerStudentCall = await eventQuery.registerStudentExcel({
-              studentData: studentArray,
-            });
+            let registerStudentCall = await eventQuery.registerStudentExcel({studentArray});
             console.log("registerStudentCall:::::::::::", registerStudentCall);
 
             if (registerStudentCall.rowCount > 0) {
@@ -448,11 +441,6 @@ let controller = {
           sessionVal,
           usernameVal
         );
-
-        let checkRollNo = await eventQuery.checkStudentRollNo(rollNo);
-        if(checkRollNo.rows[0].rollcount > 0){
-          return res.json({message:'Roll No Should Be Unique !!'})
-        }
 
         console.log('username ',studUsername)
         let checkUsername = await eventQuery.checkUser(studUsername);
