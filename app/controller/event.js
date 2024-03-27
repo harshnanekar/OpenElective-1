@@ -210,7 +210,7 @@ let controller = {
             excelHeader.length
           );
 
-          if (Object.keys(programJson).length == excelHeader.length) {
+          if (Object.keys(programJson).length == excelHeader.length || Object.keys(programJson).length-1 == excelHeader.length ) {
             for (let data of excelHeader) {
               if (!Object.values(programJson).includes(data)) {
                 return res.json({
@@ -234,6 +234,8 @@ let controller = {
             let excelYear = new String(data.Acad_Year);
             let excelCampus = new String(data.Campus);
             let excelRoll = new String(data.RollNo);
+
+            console.log('excel roll no ',excelRoll)
 
             let studentUname =
               excelStudentUname != undefined
@@ -309,6 +311,9 @@ let controller = {
             //   rollValidation
             // ) {
 
+           if(rollNo === 'undefined'){
+              rollNo = null;
+           }
               studentArray.push({
                 studentUname,
                 studentFirstName,
@@ -319,6 +324,7 @@ let controller = {
                 rollNo,
                 username,
               });
+           
             })
           //     console.log("Array found--- ", studentArray);
             
@@ -394,7 +400,6 @@ let controller = {
       const validationPromises = [
         validation.fnameValidation(fname),
         validation.lnameValidation(lname),
-        // validation.rollNoValidation(rollNo),
         validation.campusValidation(campus),
         validation.newAcadYearValidation(acadYear),
         validation.acadSessionValidation(acadSession),
@@ -420,7 +425,6 @@ let controller = {
       if (
         fnameVal &&
         lnameVal &&
-        // rollNoVal &&
         campusVal &&
         acadYearVal &&
         sessionVal &&
@@ -434,7 +438,6 @@ let controller = {
           "Validated rightly",
           fnameVal,
           lnameVal,
-          // rollNoVal,
           campusVal,
           acadYearVal,
           sessionVal,
@@ -467,9 +470,12 @@ let controller = {
             message: "Invalid Credentials !!",
           });
         }else{
+          rollNo = null;
+
           studentArray.push({
           studentFirstName,
           studentLastName,
+          rollNo,
           campus,
           studentUname,
           acadYear,

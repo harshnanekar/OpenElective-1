@@ -49,8 +49,11 @@
          <td><%= data.username %></td>
          <td><%= data.campus_name %></td>
          <td><%= data.current_session %></td>
-         <td><%= data.rollno %></td>
-
+        <% if (data.rollno != null ){ %>
+          <td><%= data.rollno %></td>
+        <% }else{  %>
+          <td>Roll No. Not Assigned</td> 
+         <% } %> 
         </tr>
        <% index++; %> 
       <% }); %>
