@@ -229,7 +229,7 @@ module.exports = {
       let username = await redisDb.get("user");
       let modules = await query.getModules(username);
       let getStudentsList = await query.getStudents();
-      let rowlength = getStudentsList.length;
+      let rowlength = getStudentsList.rowCount;
 
       return res.render("viewRegisteredStudents", {
         module: modules,
