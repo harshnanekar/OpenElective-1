@@ -806,11 +806,11 @@ let controller = {
 
         });
          
-        if (sendMailResults.rowCount > 0) {
-          return res.json({ message: "Emails Sent Successfully !!" });
-        } else {
-          return res.json({ message: "Failed To Send Emails !!" });
-        }
+        // if (sendMailResults.rowCount > 0) {
+        //   return res.json({ message: "Emails Sent Successfully !!" });
+        // } else {
+        //   return res.json({ message: "Failed To Send Emails !!" });
+        // }
       } else {
         return res.json({ message: "No Students Found !!" });
       }

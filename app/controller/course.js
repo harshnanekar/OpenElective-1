@@ -92,16 +92,22 @@ module.exports = {
               let minValidation = minCapacityperBatch ? Validation.NumberValidation(minCapacityperBatch) : false;
               let checkMinCapacity; 
 
-              if(minValidation){
-                checkMinCapacity = (minCapacityperBatch < maxCapacityPerBatch) ? true : false;
-              }
+              // if(minValidation){
+              //    if (minCapacity < maxCapacity) { 
+              //     checkMinCapacity= true 
+              //   }else{ 
+              //     checkMinCapacity= false 
+              //   };
+              // }
+
+              console.log('subject validation ',checkMinCapacity,minCapacityperBatch,maxCapacityPerBatch)
 
               if (
                 subjectValidation &&
                 departmentValidation &&
                 batchValidation &&
                 maxValidation &&
-                checkMinCapacity &&
+                // checkMinCapacity &&
                 openToAllPrograms != undefined
               ) {
                 openPrograms = openToAllPrograms === "Yes" ? "Y" : "N";

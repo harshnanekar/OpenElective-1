@@ -303,6 +303,22 @@ module.exports = class Validation {
   }
 
   static courseNameValidator(course){
+
+    // if (course.length > 0) {
+
+    //   for(let i=0;i < course.length ;i++){
+    //     let subName = course.charAt(i);
+    //   if (subName >= 0 && subName <= 9) {
+    //     return false;
+    //   }
+    //   return true;
+    //   }
+
+    // } else {
+    //   return false;
+    // }
+
+
     if(course.length > 0){
       let count =0;
       for(let i=0;i<course.length;i++){
