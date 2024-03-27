@@ -471,6 +471,25 @@
         let cmp = document.querySelector('#campusInput');
         cmp.value = campus;
 
+        let programList; 
+
+        dynamicGetFetch(`<%- BASE_URL %>elective/programsList`, 'GET')
+        .then(response => {
+          if (response.status === 'error') {
+            window.location.href = `${response.redirectTo}`;
+          }else{
+            // programList= response.programs;
+            // let courseProgram = document.getElementById('coursePrograms');
+            // Array.from(programList).forEach(course => {
+            //     let option = `<option><input type="checkbox" />${course.program_name}</option>`;
+
+            //     console.log("courses programs ", course.program_name)
+            //     courseProgram.insertAdjacentHTML('beforeEnd', option);
+            //   })
+
+          } 
+        })
+
         let obj = { subId };
         dynamicFetchApi(`<%- BASE_URL %>elective/getAllCoursePrograms`, 'POST', obj)
           .then(response => {
@@ -481,12 +500,12 @@
               let courseProgram = document.getElementById('coursePrograms');
               let programs = response.coursePrograms;
 
-              Array.from(programs).forEach(course => {
-                let option = `<option>${course.program_name}</option>`;
+              // Array.from(programs).forEach(course => {
+              //   let option = `<option>${course.program_name}</option>`;
 
-                console.log("courses programs ", course.program_name)
-                courseProgram.insertAdjacentHTML('beforeEnd', option);
-              })
+              //   console.log("courses programs ", course.program_name)
+              //   courseProgram.insertAdjacentHTML('beforeEnd', option);
+              // })
 
 
             }

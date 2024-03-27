@@ -44,4 +44,11 @@ module.exports = class ProgramQuery {
     }
     return pgPool.query(query);
   }
+
+  static adminPrograms(){
+    let query = {
+      text:`select * from program_master where active=true`,
+    }
+    return pgPool.query(query);
+  }
 };

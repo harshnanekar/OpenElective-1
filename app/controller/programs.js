@@ -287,5 +287,19 @@ module.exports = {
       console.log(error);
       return res.json({ status: "error", redirectTo: `${res.locals.BASE_URL}elective/error` }); 
     }
+  },
+
+  programsList:async (req,res) => {
+    try {
+
+      let programs = await programQuery.adminPrograms();
+      if(programs.rowCount > 0){
+        return res.json({status:'success',programs:programs.rows});
+      }
+      
+    } catch (error) {
+      console.log(error);
+      return res.json({ status: "error", redirectTo: `${res.locals.BASE_URL}elective/error` }); 
+    }
   }
 };

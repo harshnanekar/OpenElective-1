@@ -35,6 +35,7 @@ apiRouter.get('/viewBasketPreference',middleware.verifyRequest,eventController.v
 apiRouter.get('/createExcelPreference',middleware.verifyRequest,eventController.createExcelPreference);
 apiRouter.get('/viewProfile',middleware.verifyRequest,controller.viewProfile)
 apiRouter.get('/downloadAllocationReport',middleware.verifyRequest,eventController.downloadAllocationReport);
+apiRouter.get('/programsList',middleware.verifyRequest,programController.programsList);
 apiRouter.get('/viewStudents',middleware.verifyRequest,controller.viewStudents);
 apiRouter.get('/editProfile',middleware.verifyRequest,controller.editProfile);
 

@@ -259,7 +259,9 @@ let controller = {
             if (usernameValidation) {
               if (studentUname.length == 11) {
                 usernameValidation = true;
-               let checkUsername = eventQuery.checkUser(studentUname); 
+               let checkUsername = await eventQuery.checkUser(studentUname); 
+               console.log('checkUsername ',checkUsername)
+
                if(checkUsername.rows[0].userCount > 0){
                 usernameValidation=false;    
                }
@@ -302,6 +304,7 @@ let controller = {
             ) {
 
               let checkRollNo = await eventQuery.checkStudentRollNo(rollNo);
+              console.log('checkRollno ',checkRollNo)
               if(checkRollNo.rows[0].rollcount > 0){
                 emptyStudentArray.push({
                   studentUname,
