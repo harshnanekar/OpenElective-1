@@ -81,7 +81,7 @@ const query = class EventQuery{
 
   static viewPreference(eventId){
    let query = {
-    text:`select distinct s.basket_lid,b.basket_name from student_sub_allocation s inner join basket b on b.id=s.basket_lid where event_lid =$1`,
+    text: `select distinct bb.id as basket_lid,bb.basket_name from basket_event be inner join basket bb on be.basket_lid = bb.id where be.event_lid =$1`,
     values:[eventId]
    } 
    return pgPool.query(query);
