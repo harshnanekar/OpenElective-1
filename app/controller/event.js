@@ -796,7 +796,6 @@ let controller = {
       console.log('event ',eventId)
       let studentAllocateData = await eventQuery.loadStudentData(eventId);
       console.log('student allocation ',studentAllocateData.rowCount);
-      let sendMailResults;
   
       if (studentAllocateData.rowCount > 0) {
         let studentArray =  studentAllocateData.rows;

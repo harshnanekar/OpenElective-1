@@ -52,11 +52,11 @@
                 <option></option>
                 </select>
               </div>
-              <div class="form-row">
+              <div class="form-row d-none">
                 <div class="form-group col-md-12">
                     <label for="compulsorySub">Enter Number of Compulsory Subjects</label>&ensp;&ensp;<span
                         id="compError"></span></br>
-                    <input  type="text" class="form-control" id="compulsorySub" placeholder="Compulsory Subjects">
+                    <input  type="text" value="5" class="form-control" id="compulsorySub"  placeholder="Compulsory Subjects">
                 </div>
             </div>
             <button type="submit" id="submitbtn" class="btn btn-danger mt-4 btnSubmit">Add</button>
@@ -72,7 +72,7 @@
             <th>Basket Name</th>
             <th>Semester</th>
             <th>Campus</th>
-            <th>Compulsory Subjects</th>
+            <th class="d-none">Compulsory Subjects</th>
             <th>Actions</th>
         </tr>
         <tbody>
@@ -84,7 +84,7 @@
             <td><%= data.basket_name %></td>
             <td><%= data.current_session %></td>
             <td><%= data.campus_name %></td>
-            <td><%= data.no_of_comp_sub %></td>
+            <td class="d-none"><%= data.no_of_comp_sub %></td>
             <td>
             <i class="fa-solid fa-trash-arrow-up deleteIcon" data-toggle='modal'
             data-toggle='tooltip' data-target="#deletModal" title='Delete Basket'
@@ -167,6 +167,7 @@
                     let basketId = document.getElementById('inputBasket').value;
                     let basketCourses = Array.from(basketSubjects).filter(data => data.selected).map(data => data.value);
                     let compulsorySub = document.getElementById('compulsorySub').value;
+                    console.log('dnone compulsory subject ',compulsorySub)
 
                     let subjectValidation = checkSubjectValidation(compulsorySub, basketCourses.length);
                     let basketValidation = checkBasketValidation(basketId);
@@ -284,7 +285,7 @@
                                 <th>Basket Name</th>
                                 <th>Semester</th>
                                 <th>Campus</th>
-                                <th>Compulsory Subjects</th>
+                                <th class="d-none">Compulsory Subjects</th>
                                 <th>Actions</th>
                             </tr>
                             <tr><td colspan="6px">-------------------No Data Available-----------------</td></tr>
@@ -335,16 +336,18 @@
                 let numberValidation = NumberValidation(compSub);
                 if (numberValidation) {
 
-                    let sublength = Number.parseInt(compSub);
-                    console.log('basket length ', basketLength, sublength)
+                    courseError.innerText = '';
+                    return true;
+                    // let sublength = Number.parseInt(compSub);
+                    // console.log('basket length ', basketLength, sublength)
 
-                    if (basketLength >= sublength) {
-                        courseError.innerText = '';
-                        return true;
-                    } else {
-                        courseError.innerText = '*Compulsory Subjects must be equal to or less than selected subjects';
-                        return false;
-                    }
+                    // if (basketLength >= sublength) {
+                    //     courseError.innerText = '';
+                    //     return true;
+                    // } else {
+                    //     courseError.innerText = '*Compulsory Subjects must be equal to or less than selected subjects';
+                    //     return false;
+                    // }
 
                 } else {
                     courseError.innerText = '*Invalid Inputs';
