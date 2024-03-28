@@ -327,17 +327,21 @@
 
           dynamicFetchApi(`<%- BASE_URL %>elective/registerStudentManually`, 'POST', obj)
             .then(responseData => {
+              loader.style.display = 'none';
               console.log('response----- ', responseData.status);
               if (responseData.status === 'error') {
-                loader.style.display = 'none';
                 window.location.href = responseData.redirectTo;
               } else {
-                loader.style.display = 'none';
+                if(responseData.status === 'success'){
+                 window.location.href=`<%- BASE_URL %>elective/viewStudents`;
+                }else{
+
                 let msg = document.getElementById('msgModal');
                 let modalPage = `<div><h4 style="text-align:center;">${responseData.message}</h4></div>`
                 msg.innerHTML = modalPage;
                 document.querySelector('[data-target="#messageModal"]').click();         
               }
+            }
             });
         }
 

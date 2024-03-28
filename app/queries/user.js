@@ -84,9 +84,9 @@ const a = class data{
 
     static getStudents(){
      let query = {
-      text:`select u.firstname,u.lastname,u.username,c.campus_name,sm.current_session,s.rollno from student_info s inner join user_info u on s.user_lid=u.id
+      text:`select s.id,u.firstname,u.lastname,u.username,c.campus_name,sm.current_session,s.rollno from student_info s inner join user_info u on s.user_lid=u.id
       inner join campus c on c.campus_id=s.campus_lid inner join session_master sm on sm.sem_id=s.acad_session where u.active=true and s.active=true and c.active=true and 
-      sm.active=true`  
+      sm.active=true order by s.id desc`  
      }   
      return pgPool.query(query);
     }

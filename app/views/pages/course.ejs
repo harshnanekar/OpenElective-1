@@ -463,7 +463,7 @@
       </select>
       <label style="margin-top:10px;" for="coursePrograms">Programs</label></br>
 
-       <div id="coursePrograms" class="form-control" style="overflow: auto; height: 200px; " ></div>
+       <div id="coursePrograms" class="form-control" style="overflow: auto; height: 150px; " ></div>
     </div>`;
 
         let mbody = document.getElementById('getModal');
@@ -525,13 +525,17 @@
         let batch = $(e.target).closest('div').prev().find('#inputbatch').val();
         let capacity = $(e.target).closest('div').prev().find('#inputCapacity').val();
         let campus = $(e.target).closest('div').prev().find('#campusInput').val();
-        let programs = $(e.target).closest('div').prev().find('#coursePrograms').val();
+        // let programs = $(e.target).closest('div').prev().find('#coursePrograms').val();
         let subjectId = $(e.target).closest('div').prev().find('#inputSubId').val();
         let minBatch = $(e.target).closest('div').prev().find('#inputMin').val();
 
+        let programs = $('.programListArray:checked').map(function() {
+        return $(this).data('programid');
+        }).get();
+
         
         let obj = { subjectId, subName, deptName, batch,minBatch,capacity, campus, programs };
-        console.log('edit course object ',obj);
+        // console.log('edit course object ',JSON.stringify(checkedValues));
 
         dynamicFetchApi(`<%- BASE_URL %>elective/editCourse`, 'POST', obj)
           .then(response => {

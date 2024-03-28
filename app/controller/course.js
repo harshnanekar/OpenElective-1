@@ -423,71 +423,46 @@ module.exports = {
               username,
               subjectId
             );
-            let checkPrograms = await courseQuery.getAllCourseProgram(
-              subjectId
-            );
+           
             let upsertPrograms;
-            let programArray = [];
             let placeholders;
-            let val;
 
-            console.log("course count ", checkPrograms);
+            placeholders = programs
+            .map((id, index) => `$${index + 2},`)
+            .join("");
+          placeholders = placeholders.substring(0, placeholders.length - 1);
 
-            if (checkPrograms.rowCount > 0) {
+          console.log("placeholder ",JSON.stringify(placeholders))
+          upsertPrograms =await courseQuery.deleteCourseProgram(
+                  subjectId,
+                  programs,
+                  placeholders
+                )
               for (let i = 0; i < programs.length; i++) {
                 let checkCourseWithProgram =
                   await courseQuery.checkCourseWithProgram(
                     subjectId,
                     programs[i]
                   );
-                let getPrgId = await courseQuery.getProgramId(
-                  programs[i],
-                  username
-                );
-                let programId = await getPrgId.rows[0].program_id;
-                programArray.push(programId);
+               
+                console.log("checkCourseWithPrograms, ",checkCourseWithProgram)
 
-                if (checkCourseWithProgram.rowCount > 0) {
-                  val = true;
+                if (checkCourseWithProgram.rows[0].subjectcount > 0) {
+                  upsertPrograms = await courseQuery.updateSubjectProgram(
+                    subjectId,
+                    programs[i],
+                    username
+                  );
                 } else {
                   upsertPrograms = await courseQuery.allocateCoursePrograms(
                     subjectId,
-                    programId,
+                    programs[i],
                     username
                   );
                 }
               }
 
-              placeholders = programArray
-                .map((id, index) => `$${index + 2},`)
-                .join("");
-              placeholders = placeholders.substring(0, placeholders.length - 1);
-
-              upsertPrograms =
-                val === true
-                  ? courseQuery.deleteCourseProgram(
-                      subjectId,
-                      programArray,
-                      placeholders
-                    )
-                  : undefined;
-            } else {
-              for (let i = 0; i < programs.length; i++) {
-                let getPrgId = await courseQuery.getProgramId(
-                  programs[i],
-                  username
-                );
-                let programId = getPrgId.rows[0].program_id;
-
-                console.log("prg id ", programId);
-                upsertPrograms = await courseQuery.allocateCoursePrograms(
-                  subjectId,
-                  programId,
-                  username
-                );
-              }
-            }
-
+              
             if (
               (insertCourse.rowCount > 0 && upsertPrograms.rowCount > 0) ||
               upsertPrograms != undefined
