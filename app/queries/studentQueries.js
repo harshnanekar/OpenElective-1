@@ -5,8 +5,7 @@ module.exports = class Student {
     let query = {
       text: `select e.id,e.event_name,e.startdate,e.end_date from event_master e inner join session_master s on e.session_lid=s.sem_id
       where s.current_session in (select s.next_session from session_master s inner join student_info si on s.sem_id = si.acad_session 
-      inner join user_info u on u.id=si.user_lid where u.username =$1 and s.active=true and si.active=true and u.active=true) and e.active=true
-      and e.is_published='Y' and (e.end_date = now() or e.end_date > CURRENT_DATE)`,
+      inner join user_info u on u.id=si.user_lid where u.username =$1 and s.active=true and si.active=true and u.active=true) and e.active=true`,
       values: [username],
     };
     return pgPool.query(query);
