@@ -33,7 +33,7 @@ const query = class EventQuery{
   static async getAllEventData(username){
     
     let queries = {
-      text:`select e.id,e.event_name,s.current_session,e.acad_year,e.createdby,e.startdate,e.end_date,c.campus_name,e.is_published from event_master e 
+      text:`select e.id,e.event_name,s.current_session,e.acad_year,e.createdby,e.startdate,e.end_date,c.campus_name from event_master e 
       inner join session_master s on e.session_lid = s.sem_id inner join campus c on e.campus_lid = c.campus_id where e.createdby = $1 
       and e.active = true and c.active = true and s.active = true order by e.id desc ; `,
       values: [username]

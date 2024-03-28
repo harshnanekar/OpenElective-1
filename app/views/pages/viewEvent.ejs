@@ -114,7 +114,7 @@
         <th>Campus</th>
         <th>Start Date</th>
         <th>End Date</th>
-        <th>Published</th>
+        <!-- <th>Published</th> -->
         <th>Actions</th>
         </thead>
         <tbody>
@@ -133,7 +133,7 @@
                <% let edate = event.end_date; %>
                <% const dates = edate.toISOString().slice(0, 10); const times = edate.toTimeString().slice(0, 8); %>
                <td id="eventEnd"><%= dates %> <%= times%></td>
-               <td id="eventPublish"><%= event.is_published %></td>  
+               <!-- <td id="eventPublish"><%= event.is_published %></td>   -->
                <td ><i style="cursor:pointer;" class="fa-solid fa-trash-arrow-up deleteModal"  data-toggle='modal' data-toggle='tooltip' data-target="#deletModal" title = 'Delete' width="2%" ></i>&ensp;
                <i style="cursor:pointer;" class="fa-solid fa-pencil editEventModal" data-toggle='modal' data-toggle='tooltip' data-target='#exampleModalCenter' title = 'Edit' width="2%"></i>&ensp;
                <i style="cursor:pointer;" class="fa-solid fa-file-export allocateEvents" data-toggle='tooltip' title = 'Allocate Event Users' width="2%" ></i>&ensp;
