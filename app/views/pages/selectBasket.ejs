@@ -124,7 +124,7 @@
 
                 console.log("timestring ", timeString);
 
-                let compSub = document.querySelector('#basketName').getAttribute('data-compSub');
+                let compSub = 5;
                 let eventLid = document.querySelector('#eventName').getAttribute('data-eventLid');
                 let userLid = "<%= module[0].id %>";
                 let basketLid = document.querySelector('#basketName').getAttribute('data-basketLid');
@@ -174,7 +174,7 @@
                                 let basketName = document.querySelector('#basketName');
                                 basketName.innerText = `Basket: ${response.basketData[0].insert_student_course.nextBasket[0].basket_name}`;
                                 let basketId = response.basketData[0].insert_student_course.nextBasket[0].basket_id;
-                                let compSub = response.basketData[0].insert_student_course.nextBasket[0].no_of_comp_sub;
+                                let compSub = 5;
                                 basketName.setAttribute('data-basketLid', basketId)
                                 basketName.setAttribute('data-compSub', compSub)
 
@@ -208,7 +208,7 @@
 
                 } else {
                     let modalBody = document.querySelector('#msgModal');
-                    modalBody.innerHTML = `<h4 style="text-align:center;">Select Courses ${compSub} or more than ${compSub} !!</h4>`;
+                    modalBody.innerHTML = `<h4 style="text-align:center;">It is mandatory to select ${compSub} courses !!</h4>`;
                     document.querySelector('[data-target="#messageModal"]').click();
                 }
 
