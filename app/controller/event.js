@@ -704,6 +704,8 @@ let controller = {
       let viewBasketUser = await eventQuery.getBasketPreference(basketId);
       let rowlength = viewBasketUser.length;
 
+      console.log('basket preference ',JSON.stringify(viewBasketUser.rows))
+
       return res.render("viewBasketUserPreference", {
         module: modules,
         basketUser: viewBasketUser.rows,
@@ -781,6 +783,7 @@ let controller = {
 
         return res.sendFile(filePath);
       }
+
     } catch (error) {
       console.log("Error " + error.message);
       return res.redirect(`${res.locals.BASE_URL}elective/error`);
