@@ -85,7 +85,7 @@ static insertCompulsorySub(basketId,compulsorySub){
 
 static checkAbbr(abbr){
  let query = {
-  text : `select basket_abbr from basket where basket_abbr=$1 where active=true`,
+  text : `select basket_abbr from basket where basket_abbr=$1 and active=true`,
   values:[abbr]
  }
  return pgPool.query(query); 
