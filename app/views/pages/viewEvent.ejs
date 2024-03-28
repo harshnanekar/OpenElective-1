@@ -443,11 +443,11 @@ document.addEventListener('click',(e) => {
       if(response.status === 'error'){
       window.location.href=`${response.redirectTo}`;
       }else{
-        // loader.style.display='none';
-        // let msg = document.getElementById('msgModal');
-        // let modalPage = `<div><h4 style="text-align:center;">${response.message}</h4></div>`
-        // msg.innerHTML = modalPage;
-        // document.querySelector('[data-target="#messageModal"]').click();
+        loader.style.display='none';
+        let msg = document.getElementById('msgModal');
+        let modalPage = `<div><h4 style="text-align:center;">${response.message}</h4></div>`
+        msg.innerHTML = modalPage;
+        document.querySelector('[data-target="#messageModal"]').click();
       }
     })
   }

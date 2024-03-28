@@ -127,7 +127,7 @@ const query = class EventQuery{
   static loadStudentData(eventId){
    let query={
     text:`select distinct u.email,u.username,s.user_lid from student_sub_allocation s  inner join user_info u on u.id=s.user_lid 
-    where s.event_lid=$1 and s.active=true and u.active=true limit 5`,
+    where s.event_lid=$1 and s.active=true and u.active=true `,
     values:[eventId]
    } 
    return pgPool.query(query)

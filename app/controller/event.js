@@ -829,6 +829,8 @@ let controller = {
           sendMailResults = await Promise.all([emailController.sendMail(sendMailTo, subject, message)]);
 
         });
+
+        console.log('send mail results ')
          
         // if (sendMailResults.rowCount > 0) {
         //   return res.json({ message: "Emails Sent Successfully !!" });

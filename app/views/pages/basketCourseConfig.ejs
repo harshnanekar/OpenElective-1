@@ -224,7 +224,7 @@
                                 <div style=" border: 1px solid lightgrey;padding: 10px;">${response.basket[0].basket_name} </div>
                                 </div>
                                 <div class="form-group">
-                                    <div style="border:lightgrey 1px;" class="form-group">
+                                    <div style="border:lightgrey 1px; overflow: auto; height: 150px;" class="form-group">
                                         <label for="formGroupExampleInput2">Course Name</label>
                                             <div style=" border: 1px solid lightgrey;padding: 20px;">
                                                 ${response.basket.map((data,index) => `<p>${index + 1}. ${data.subject_name}</p>`).join('')}
