@@ -13,9 +13,9 @@ module.exports = class ProgramQuery {
 
   static async viewPrograms(username) {
     let query = {
-      text: `select distinct p.id,p.program_name,c.campus_name,c.campus_abbr,p.program_id from program_campus_mapping pc 
+      text: `select distinct p.id,p.program_name,c.campus_name,c.campus_abbr,p.program_id,p.programCode from program_campus_mapping pc 
     inner join campus c on pc.campus_lid=c.campus_id inner join program_master p on p.program_id = pc.program_lid
-    where p.createdby=$1 and pc.active=true and p.active=true and c.active=true order by p.id desc;`,
+    where p.createdby=$1 and pc.active=true and p.active=true and c.active=true order by p.programCode asc;`,
       values: [username],
     };
     return pgPool.query(query);
@@ -23,7 +23,7 @@ module.exports = class ProgramQuery {
 
   static async getAllProgramsList(username) {
     let query = {
-      text: `select program_id,program_name from program_master where createdby =$1 and active=true`,
+      text: `select program_id,program_name,programCode from program_master where createdby =$1 and active=true order by programCode asc`,
       values: [username],
     };
     return pgPool.query(query);
@@ -47,7 +47,7 @@ module.exports = class ProgramQuery {
 
   static adminPrograms(){
     let query = {
-      text:`select * from program_master where active=true`,
+      text:`select * from program_master where active=true order by programCode asc`,
     }
     return pgPool.query(query);
   }

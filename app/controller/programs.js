@@ -108,7 +108,9 @@ module.exports = {
                 campusValidation &&
                 idValidation
               ) {
-                programArray.push({ program, campus, programId, username });
+                let programCode = program.substring((program.lastIndexOf('-') + 1),program.length);
+                console.log("code :: ",programCode)
+                programArray.push({ program, campus, programId, username ,programCode});
               } else {
                 nonInsertedPrograms.push({ program, campus, programId });
               }
@@ -173,8 +175,11 @@ module.exports = {
         console.log("program validation:: ", programIdValidation);
 
         if (campusValidation && programIdValidation) {
+
+          let programCode = program.substring((program.lastIndexOf('-') + 1),program.length);
+
           if (userRole === "Role_Admin") {
-            let prgArray = [{ program, campus, programId, username }];
+            let prgArray = [{ program, campus, programId, username,programCode }];
             let insertProgramQuery = await programQuery.insertPrograms({
               prgArray,
             });

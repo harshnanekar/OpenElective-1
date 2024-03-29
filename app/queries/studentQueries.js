@@ -6,7 +6,7 @@ module.exports = class Student {
       text: `select e.id,e.event_name,e.startdate,e.end_date from event_master e inner join session_master s on e.session_lid=s.sem_id
       where s.current_session in (select s.next_session from session_master s inner join student_info si on s.sem_id = si.acad_session 
       inner join user_info u on u.id=si.user_lid where u.username =$1 and s.active=true and si.active=true and u.active=true) and e.active=true
-      and (e.end_date = now() or e.end_date > CURRENT_DATE) and (e.startdate = now() or e.startdate >= CURRENT_DATE)`,
+      and (e.end_date = now() or e.end_date > CURRENT_DATE) `,
       values: [username],
     };
     return pgPool.query(query);
@@ -43,7 +43,7 @@ module.exports = class Student {
 //       text: `select distinct su.subject_lid,be.event_lid,s.subject_name from final_allocation su inner join subject_master s on su.subject_lid = s.sub_id  
 //  inner join basket_event be on be.event_lid = su.event_lid inner join user_info u on u.id=su.user_lid where u.username = $1 and su.event_lid not in ($2)
 //  and su.active=true and be.active=true and s.active=true and u.active=true`,
-      text:`select distinct su.subject_lid,be.event_lid,s.subject_name from student_sub_allocation su inner join subject_master s on su.subject_lid = s.sub_id  
+      text:`select distinct su.subject_lid,be.event_lid,s.subject_name from final_allocation su inner join subject_master s on su.subject_lid = s.sub_id  
       inner join basket_event be on be.event_lid = su.event_lid inner join user_info u on u.id=su.user_lid where u.username = $1 and su.event_lid not in ($2)
       and su.active=true and be.active=true and s.active=true and u.active=true`,
       values: [username, eventId],
@@ -64,11 +64,16 @@ module.exports = class Student {
       text: `SELECT b.id, b.basket_name, (
         SELECT json_agg(row_to_json(s))
         FROM (
-            SELECT s.subject_name
-            FROM student_sub_allocation sm 
-            INNER JOIN subject_master s ON s.sub_id = sm.subject_lid 
-            WHERE sm.event_lid = $1 AND sm.basket_lid = b.id and s.active=true
-            and sm.user_lid in (select id from user_info where username = $2 ) 
+           SELECT subject_name
+			FROM subject_master
+			JOIN (
+				SELECT sm.subject_lid, sm.sub_pref
+				FROM student_sub_allocation sm 
+				WHERE sm.event_lid = $1 AND sm.basket_lid = b.id
+				AND sm.user_lid IN (SELECT id FROM user_info WHERE username = $2)
+			) AS preferred_subjects
+			ON subject_master.sub_id = preferred_subjects.subject_lid
+			ORDER BY preferred_subjects.sub_pref ASC
         ) s
     ) AS subject_names
     FROM student_sub_allocation sm 

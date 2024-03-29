@@ -97,7 +97,7 @@ static updateCourse(subName,deptName,batches,capacity,minBatch,campus,username,s
 static async checkCourseWithProgram(subId,program){
  let query ={
   text: `select count(*) as subjectCount from subject_program_mapping where subject_lid=$1 and 
-         program_lid in ($2) and active=true `,
+         program_lid in ($2)`,
   values:[subId,program]            
  }
  return pgPool.query(query);       
