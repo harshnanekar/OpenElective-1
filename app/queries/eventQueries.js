@@ -158,6 +158,13 @@ const query = class EventQuery{
     }
     return pgPool.query(query);
   }
+  static getEventData(eventId){
+    let query = {
+      text:`select * from event_master where id = $1 and active=true`,
+      values:[eventId]
+    }
+    return pgPool.query(query)
+  }
 
 
 }

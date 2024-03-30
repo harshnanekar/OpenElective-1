@@ -46,12 +46,16 @@
                   <% }); %>
                 </select>
               </div>
-              <div class="form-group ">
-                <label for="inputCourse">Select Course's</label>&ensp;&ensp;<span id="courseError"></span>
+              <label for="inputCourse">Select Course's</label>&ensp;&ensp;<span id="courseError"></span>
+              <div id="courses" class="form-control" style="overflow: auto; height: 150px; " >
+             </div>
+              <!-- <label for="inputCourse">Select Course's</label>&ensp;&ensp;<span id="courseError"></span> -->
+              <!-- <div class="form-group ">
+                
                 <select id="inputCourse" class="form-control" multiple>
                 <option></option>
                 </select>
-              </div>
+              </div> -->
               <div class="form-row d-none">
                 <div class="form-group col-md-12">
                     <label for="compulsorySub">Enter Number of Compulsory Subjects</label>&ensp;&ensp;<span
@@ -122,7 +126,10 @@
     document.addEventListener('change', function (e) {
         if (e.target.classList.contains('basketInput')) {
             let basketId = e.target.value;
-            let obj = { basketId };
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventId = urlParams.get('id');
+
+            let obj = { basketId,eventId };
 
             let baskets = document.querySelectorAll('#inputBasket');
             let basketError = document.getElementById('basketError');
@@ -138,17 +145,45 @@
                         window.location.href = `${response.redirectTo}`;
                     } else {
 
-                        let course = document.querySelector('#inputCourse');
-                        let coursesData = response.courses;
+                        let course = document.querySelector('#courses');
 
-                        console.log(JSON.stringify(coursesData))
-                        let option ;
-                        Array.from(coursesData).forEach(data => {
-                            option += `<option value="${data.sub_id}">${data.subject_name}</option>`
+                        let allCourses = response.courseList;
+                        let coursesData = response.courses;
+                        let assignedCourse = response.assignedCourse;
+
+                        console.log('basket courses ',coursesData)
+
+                        console.log('all subjects ',JSON.stringify(allCourses))
+                        let courseOption = ``;
+                        Array.from(allCourses).forEach(data => {
+                            console.log('subjects ',data.sub_id)
+                            courseOption += `
+                            <label><input data-subId=${data.sub_id} type="checkbox" class="courseArray" />&ensp;${data.subject_name}</label></br>`
 
                         });
                         course.innerHTML ="";
-                        course.insertAdjacentHTML('beforeEnd', option);
+                        course.insertAdjacentHTML('beforeEnd', courseOption);
+
+                       let courseArray = document.querySelectorAll('.courseArray');
+                   
+
+                        Array.from(courseArray).forEach(data => {
+                           Array.from(coursesData).forEach(sub => {
+                            let subjectId = data.getAttribute('data-subId');
+                            if(subjectId === sub.sub_id){
+                              data.setAttribute('checked', true);  
+                            }
+                           })
+                        });
+
+                        Array.from(courseArray).forEach(data => {
+                           Array.from(assignedCourse).forEach(sub => {
+                            let subjectId = data.getAttribute('data-subId');
+                            if(subjectId === sub.sub_id){
+                              data.setAttribute('disabled', true);  
+                            }
+                           })
+                        });
                     }
                 })
             }else{
@@ -162,12 +197,12 @@
             document.addEventListener('click', function (e) {
 
                 if (e.target.classList.contains('btnSubmit')) {
-                    let basketSubjects = document.getElementById('inputCourse');
+                    let basketSubjects = document.querySelectorAll('.courseArray');
 
                     let basketId = document.getElementById('inputBasket').value;
-                    let basketCourses = Array.from(basketSubjects).filter(data => data.selected).map(data => data.value);
+                    let basketCourses = Array.from(basketSubjects).filter(data => data.checked).map(data => data.getAttribute('data-subId'));
                     let compulsorySub = document.getElementById('compulsorySub').value;
-                    console.log('dnone compulsory subject ',compulsorySub)
+                    console.log('dnone compulsory subject ',compulsorySub,JSON.stringify(basketCourses))
 
                     let subjectValidation = checkSubjectValidation(compulsorySub, basketCourses.length);
                     let basketValidation = checkBasketValidation(basketId);

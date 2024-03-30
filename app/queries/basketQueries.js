@@ -14,6 +14,7 @@ static getBasketForEvent(eventId){
  return pgPool.query(query);
 }
 
+
 static insertBasket(basketdata){
    let query = {
     text:`select createbasket($1)`,
@@ -58,9 +59,8 @@ static displayAllBaskets(eventId){
 
 static getBasketCourses(basketLid){
  let query = {
-  text:`select sub_id,subject_name from subject_master where sub_id not in (select s.sub_id from basket_event be inner join basket_subject bs on be.basket_lid=bs.basket_lid inner join subject_master s 
-    on s.sub_id=bs.subject_lid where be.event_lid in(select e.id from event_master e inner join basket_event bse on e.id=bse.event_lid where bse.basket_lid =$1 and e.active=true and bse.active=true) 
-    and be.active=true and bs.active=true and s.active=true) and active=true`,
+  text:`select s.sub_id ,s.subject_name from subject_master s inner join basket_subject bs on s.sub_id = bs.subject_lid 
+  where bs.basket_lid = $1 and bs.active=true and s.active=true `,
   values:[basketLid]  
  }   
  return pgPool.query(query);
@@ -98,5 +98,30 @@ static assignedBasketCourse(basketId){
     values:[basketId]
   }
   return pgPool.query(query);
+}
+
+static getSelectedCourses(basketId,eventId){
+  let query = {
+    text:`select s.sub_id ,s.subject_name from subject_master s inner join basket_subject bs on s.sub_id = bs.subject_lid inner join basket_event be on 
+    be.basket_lid=bs.basket_lid where be.event_lid=$1 and be.basket_lid not in ($2) and s.active=true and bs.active=true and be.active=true`,
+    values:[eventId,basketId]
+  }
+  return pgPool.query(query)
+}
+
+static checkBasketCourse(basketId,basketCourse){
+  let query = {
+   text:`select * from basket_subject where basket_lid=$1 and subject_lid = $2 and active=true `,
+   values:[basketId,basketCourse] 
+  }
+  return pgPool.query(query)
+}
+
+static updatebasketSubject(basketId,basketCourse){
+  let query ={
+    text:`update basket_subject set subject_lid=$1,active=true where basket_lid =$2 and subject_lid = $3`,
+    values:[basketCourse,basketId,basketCourse]
+  }
+  return pgPool.query(query)
 }
 } 

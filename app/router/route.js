@@ -77,6 +77,7 @@ apiRouter.post('/resetPass',controller.resetPass);
 apiRouter.post('/adminAllocatingEvents',middleware.verifyRequest,eventController.adminAllocatingEvents);
 apiRouter.post('/insertProfileDetails',middleware.verifyRequest,controller.insertProfileDetails);
 apiRouter.post('/sendEventMail',middleware.verifyRequest,eventController.sendEventMail);
+apiRouter.post('/checkEventBeforeSelection',middleware.verifyRequest,studentController.checkEventBeforeSelection)
 
 
 

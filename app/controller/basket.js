@@ -185,12 +185,16 @@ module.exports = {
 
   getBasketSubject: async (req, res) => {
     try {
-      let { basketId } = req.body;
-      let basketCourses = await basket.getBasketCourses(basketId);
+      let { basketId,eventId } = req.body;
 
-      if (basketCourses.rowCount > 0) {
-        return res.json({ status: "success", courses: basketCourses.rows });
-      }
+      let getAllCourse = await courseQuery.fetchCourses();
+      let basketCourses = await basket.getBasketCourses(basketId);
+      let getSelectedCourses = await basket.getSelectedCourses(basketId,eventId)
+
+      console.log('basket course ',basketId,JSON.stringify(basketCourses.rows),JSON.stringify(getAllCourse.rows))
+
+        return res.json({ status: "success", courses: basketCourses.rows,courseList: getAllCourse.rows,assignedCourse:getSelectedCourses.rows});
+      
     } catch (error) {
       console.log(error);
       return res.json({
@@ -206,6 +210,7 @@ module.exports = {
       let role = await redisDb.get("role");
 
       let { basketId, basketCourses, compulsorySub } = req.body;
+      console.log('basket courses')
       console.log(JSON.stringify(basketCourses));
 
       if (
@@ -216,11 +221,21 @@ module.exports = {
         if (role === "Role_Admin") {
           let basketSubject;
           for (let basketCourse of basketCourses) {
+
+            let checkbasketSubject = await basket.checkBasketCourse(basketId,basketCourse);
+
+            if(checkbasketSubject.rowCount > 0){
+
+              basketSubject = await basket.updatebasketSubject(basketId,basketCourse);
+
+            }else{
+
             basketSubject = await basket.insertBasketSubject(
               basketId,
               basketCourse,
               username
             );
+            }
           }
 
           let compSub = await basket.insertCompulsorySub(

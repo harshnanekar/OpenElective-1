@@ -36,7 +36,7 @@
         <% if(event.length > 0){ %>
         <% let index =1; %>
         <% event.forEach(eventRow => { %>
-        <tr>
+        <tr data-eventId = "<%= eventRow.id %>" >
          <td><%= index %></td>   
          <td><%= eventRow.event_name%></td>
          <% let sdate = eventRow.startdate; %>
@@ -46,7 +46,7 @@
          <% const dates = edate.toISOString().slice(0, 10); const times = edate.toTimeString().slice(0, 8); %>
          <td><%= dates %><%= " " %><%= times %></td>
          <td>
-         <a href="<%- BASE_URL %>elective/startCourseSelection?id=<%= eventRow.id %>"><i style="cursor:pointer;text-decoration:none;color: black;" class="fa-solid fa-hand-pointer" data-toggle="tooltip" title="Start Selection" ></i></a>   
+         <i style="cursor:pointer;text-decoration:none;color: black;" class="fa-solid fa-hand-pointer checkEvent" data-toggle="tooltip" title="Start Selection" ></i>
          </td>
         </tr>
         <% index++; %>
@@ -58,8 +58,42 @@
           <%}%>
        </table>
     </div>
+    <%- include('messageModal.ejs') %>
 </body>
 
 <%- include ('../partials/partial2') %>
 <script src= "../js/script.js" ></script>
+
+<script>
+
+document.addEventListener('click',(e) => {
+
+
+ if(e.target.classList.contains('checkEvent')) {
+
+  let eventId = e.target.closest('tr').getAttribute('data-eventId');
+  console.log('event id ',eventId)
+  let obj = {eventId};
+
+  dynamicFetchApi(`<%- BASE_URL %>elective/checkEventBeforeSelection`,'POST',obj)
+  .then(response => {
+    if(response.status === 'error'){
+      window.location.href=`${response.redirectTo}`;
+    }else{
+      if(response.status === 'success'){
+        window.location.href=`${response.redirectTo}?id=${eventId}`;
+      }else{
+        let modalBody = document.querySelector('#msgModal');
+        modalBody.innerHTML = `<h4 style="text-align:center;">${response.message}</h4>`;
+        document.querySelector('[data-target="#messageModal"]').click();
+      }
+    }
+  })
+}
+})
+
+
+
+
+</script>
 </html>

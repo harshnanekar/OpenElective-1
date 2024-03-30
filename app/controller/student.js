@@ -2,6 +2,7 @@ const studentQuery = require('../queries/studentQueries.js');
 const userQuery = require("../queries/user.js");
 const validationController = require("../controller/validation.js");
 const {redisDb} = require("../config/database.js");
+const eventQuery = require('../queries/eventQueries.js');
 
 module.exports = {
   viewStudentEvents: async (req, res) => {
@@ -20,10 +21,44 @@ module.exports = {
     }
   },
 
+  checkEventBeforeSelection: async (req, res) => {
+    try {
+        let { eventId } = req.body;
+
+        let getEvent = await eventQuery.getEventData(eventId);
+
+        console.log('Event:', getEvent.rows);
+
+        const startDateUTC = new Date(getEvent.rows[0].startdate);
+        const endDateUTC = new Date(getEvent.rows[0].end_date);
+        const currentDate = new Date();
+
+
+       const startDateLocal = startDateUTC.toLocaleString();
+       const endDateLocal = endDateUTC.toLocaleString();
+       const currentDateLocal = currentDate.toLocaleString();
+
+       console.log('startdate and enddate ',startDateLocal,endDateLocal,currentDateLocal)
+
+    
+            if (currentDateLocal >= startDateLocal && currentDateLocal <= endDateLocal) {
+                return res.json({ status: 'success', redirectTo: `${res.locals.BASE_URL}elective/startCourseSelection` });
+            } else {
+                return res.json({ message: 'Cannot Elect Event!!' });
+            }
+     
+    } catch (error) {
+        console.log(error.message);
+        return res.json({ status: "Error", redirectTo: `${res.locals.BASE_URL}elective/error` });
+    }
+},
+
+
   startCourseSelection: async (req, res) => {
     try {
       let username = await redisDb.get('user');
         let eventId = req.query.id;
+
 
         console.log(eventId, username);
         let displayBasket = await studentQuery.displayBasket(eventId, username);

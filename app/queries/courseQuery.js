@@ -26,7 +26,7 @@ static getCourses(username){
  let query={
   text: `SELECT s.sub_id, s.subject_name,COALESCE(c.campus_name, 'No Campus Assigned') AS campus_name,s.open_to_allprograms,s.dept_name,s.max_capacity_per_batch,s.min_capacity_per_batch,s.batches,s.campus_lid
   FROM public.subject_master s LEFT JOIN campus c ON s.campus_lid = c.campus_id WHERE s.createdby =$1 AND s.active = true AND (c.active = true OR c.active IS NULL) 
-  ORDER BY s.created_date DESC`,
+  ORDER BY s.subject_name asc`,
   values:[username]  
  }   
  return pgPool.query(query);
@@ -113,10 +113,17 @@ static async getProgramId(program,username){
 
 static getAllCourses(username){
  let query = {
-  text:`select sub_id,subject_name from subject_master where createdby=$1 and active = true`,     
+  text:`select sub_id,subject_name from subject_master where createdby=$1 and active = true order by subject_name asc`,     
   values:[username]
  }      
  return pgPool.query(query);
+}
+
+static fetchCourses(){
+  let query ={
+    text:`select * from subject_master where active=true order by subject_name asc`,    
+  }     
+  return pgPool.query(query);
 }
 
 

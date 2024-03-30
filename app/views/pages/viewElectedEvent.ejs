@@ -41,12 +41,13 @@
         <tr>
          <td><%= index %></td>   
          <td><%= eventRow.event_name%></td>
-         <% let sdate = eventRow.startdate.toISOString(); %>
-         <% let date = sdate.split('T')[0]; let time= sdate.split('T')[1] ;  let stime= time.split('.')[0] ; %>
-         <td><%= date %><%= " " %><%= stime %></td>
-         <% let edate = eventRow.end_date.toISOString(); %>
-         <% let endate = edate.split('T')[0]; let etime= edate.split('T')[1] ;  let edtime= etime.split('.')[0] ; %>
-         <td id="eventEnd"><%= endate %><%= " " %><%= edtime %></td>
+       
+         <% let sdate = eventRow.startdate; %>
+         <% const date = sdate.toISOString().slice(0, 10); const time = sdate.toTimeString().slice(0, 8); %>
+         <td><%= date %><%= " " %><%= time %></td>
+         <% let edate = eventRow.end_date; %>
+         <% const dates = edate.toISOString().slice(0, 10); const times = edate.toTimeString().slice(0, 8); %>
+         <td id="eventEnd"><%= dates %><%= " " %><%= times %></td>
          <td>
          <a href="<%- BASE_URL %>elective/viewStudentElectedEvents?id=<%= eventRow.id %>"><i style="cursor:pointer;color:black;" class="fa-solid fa-eye" data-toggle="tooltip" title="View Event" ></i></a>   
          </td>
