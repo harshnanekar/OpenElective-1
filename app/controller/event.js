@@ -7,6 +7,7 @@ const path = require('path');
 const student = require("./student.js");
 const emailController = require("../controller/email.js");
 const os = require('os');
+const { Console } = require("console");
 
 
 
@@ -57,6 +58,8 @@ let controller = {
       let { eventName, semester, acad_year, campus, start_date, end_date } =
         req.body;
 
+        console.log('start date and end date ',start_date,end_date)
+
       let eventValidation = validation.eventvalidator(eventName);
       let campusValidate = validation.campusValidation(campus);
       let sessionValidate = validation.acadSessionValidation(semester);
@@ -70,11 +73,8 @@ let controller = {
         sessionValidate &&
         acadYearValidation
       ) {
-        let startDate = start_date.split("T")[0];
-        let endDate = end_date.split("T")[0];
-
-        console.log("start_date", startDate, "end_date", endDate);
-        let dateValidate = new Date(startDate) < new Date(endDate);
+  
+        let dateValidate = new Date(start_date) < new Date(end_date);
         if (dateValidate) {
           let jsonData = JSON.stringify({
             eventName,
