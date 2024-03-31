@@ -848,6 +848,43 @@ let controller = {
       });
     }
   },
+
+  analytics : async (req,res) => {
+
+    try {
+
+      let username = await redisDb.get("user");
+
+      let getmodules = await query.getModules(username);      
+      let eventData = await eventQuery.getAllocatedEvents();
+
+      return res.render('analytics',{module:getmodules,event:JSON.stringify(eventData.rows)})
+      
+    } catch (error) {
+      console.log("Error " + error.message);
+      return res.redirect(`${res.locals.BASE_URL}elective/error`);
+    }
+
+  },
+
+  fetchAnalyticsData :async (req,res) => {
+    try {
+
+      let {eventId} = req.body;
+      let getAnalyticsData = await eventQuery.getEventAnalytics(eventId);
+      let getUnallocated = await eventQuery.getUnallocatedAnalytics(eventId);
+      
+      return res.json({status:'success',eventRow:getAnalyticsData.rowCount,event:getAnalyticsData.rows,
+      unallocatedRow : getUnallocated.rowCount,unallocated:getUnallocated.rows})
+      
+    } catch (error) {
+      console.log(error);
+      return res.json({
+        status: "error",
+        redirectTo: `${res.locals.BASE_URL}elective/error`,
+      });
+    }
+  }
   
 };
 
