@@ -31,7 +31,7 @@ module.exports = {
 
         console.log('checkEventSelected ',checkEventSelected)
         if(checkEventSelected.rowCount > 0){
-          return res.json({ message: 'Event Has Been Elected!!' });
+          return res.json({ message: `The Event's Subjects Have Been Selected!!` });
         }
 
         console.log('Event:', getEvent.rows);
