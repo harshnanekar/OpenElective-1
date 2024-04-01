@@ -12,6 +12,14 @@ const query = class EventQuery{
     return pgPool.query(queries);  
   }  
 
+  static checkEventSelected(eventId,username){
+   let query ={
+    text:`select * from student_sub_allocation where user_lid in (select id from user_info where username =$1) and event_lid = $2`,
+    values:[username,eventId]
+   } 
+   return pgPool.query(query)
+  }
+
 
   static async getCampus(){
     return pgPool.query(`select campus_name from campus where active=true`);

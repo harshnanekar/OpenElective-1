@@ -24,8 +24,15 @@ module.exports = {
   checkEventBeforeSelection: async (req, res) => {
     try {
         let { eventId } = req.body;
+        let username = await redisDb.get('user');
 
         let getEvent = await eventQuery.getEventData(eventId);
+        let checkEventSelected = await eventQuery.checkEventSelected(eventId,username);
+
+        console.log('checkEventSelected ',checkEventSelected)
+        if(checkEventSelected.rowCount > 0){
+          return res.json({ message: 'Event Has Been Elected!!' });
+        }
 
         console.log('Event:', getEvent.rows);
 

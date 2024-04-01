@@ -72,16 +72,23 @@
                                             Preference No.<%= index %>.
                                         </span><select class="selectSubject form-control">
                                             <option id="defaultCourse" selected>Select Course</option>
-                                            <% showBasket.forEach(datas=> { %>
-                                                <option class="subjectName" value="<%= datas.sub_id %>">
-                                                    <%= datas.subject_name %>
-                                                </option>
+                                            <% showBasket.forEach(datas => { %>
+                                                <% let isYearBack = false; %>
+                                                <% yearBackSubjects.forEach(data => { %>
+                                                    <% if (datas.sub_id === data.subject_lid) { %>
+                                                        <% isYearBack = true; %>
+                                                    <% } %>
                                                 <% }) %>
-                                                    <% yearBackSubjects.forEach(data=> { %>
-                                                        <option style="color:grey;" disabled>
-                                                            <%= data.subject_name %>
-                                                        </option>
-                                                        <% }); %>
+                                                <% if (isYearBack) { %>
+                                                    <option style="color:red;" class="subjectName" value="<%= datas.sub_id %>" disabled>
+                                                        <%= datas.subject_name %>
+                                                    </option>
+                                                <% } else { %>
+                                                    <option class="subjectName" value="<%= datas.sub_id %>">
+                                                        <%= datas.subject_name %>
+                                                    </option>
+                                                <% } %>
+                                            <% }) %>
                                         </select></div></br>
 
                                     <% index++; %>
@@ -102,6 +109,7 @@
     <script src="../js/script.js"></script>
     <script>
 
+    
         document.addEventListener('click', function (e) {
 
             if (e.target.classList.contains('reset')) {
@@ -184,21 +192,30 @@
 
                                 let s_lid = `<option id="defaultCourse" selected>Select Course</option>
                             ${subjectLid.map(datas => `
-                                <option class="subjectName" value="${datas.subject_id}">
-                                    ${datas.subject_name}
-                                </option>`
-                                ).join('')}
-                            ${yearBackSubject.map(datas => `
-                                <option style="color:grey;" disabled>
+                                <option class="subjectNames" value="${datas.subject_id}">
                                     ${datas.subject_name}
                                 </option>`
                                 ).join('')}`;
 
-
+                            
                                 let selectSubject = document.querySelectorAll('.selectSubject');
 
                                 Array.from(selectSubject).forEach(selectOption => {
                                     selectOption.innerHTML = s_lid;
+                                })
+
+                                
+                                let subjectName = document.querySelectorAll('.subjectNames');
+                                Array.from(subjectName).forEach(data => {
+                                    let subjectId = data.value;
+                                    console.log('subject data ',JSON.stringify(data))
+                                   yearBackSubject.forEach(sub => {
+                                        let yearSubject = sub.subject_lid;
+                                        if(subjectId === yearSubject){
+                                        data.setAttribute('disabled',true)
+                                        data.style.color='red';
+                                        }
+                                    })
                                 })
                              }else{
                                 window.location.href=`<%- BASE_URL %>elective/viewStudentElectedEvents?id=${eventLid}`;
