@@ -166,6 +166,33 @@ const query = class EventQuery{
     return pgPool.query(query)
   }
 
+  static getAllocatedEvents(){
+    let query = {
+      text:`SELECT f.event_lid,e.event_name, COUNT(DISTINCT user_lid) AS user_count
+      FROM final_allocation f inner join event_master e on f.event_lid = e.id
+      GROUP BY event_lid,e.event_name`,
+    }
+    return pgPool.query(query)
+  }
+
+  static getEventAnalytics(eventId){
+    let query = {
+      text:`SELECT f.basket_lid,b.basket_name, COUNT(DISTINCT user_lid) AS user_count
+      FROM final_allocation f inner join basket b on f.basket_lid = b.id WHERE event_lid = $1
+      GROUP BY basket_lid,b.basket_name`,
+      values:[eventId]
+    }
+    return pgPool.query(query)
+  }
+
+  static getUnallocatedAnalytics(eventId){
+    let query = {
+      text:`select distinct user_lid from unallocated_students where event_lid = $1`,
+      values :[eventId]
+    }
+    return pgPool.query(query)
+  }
+
 
 }
 

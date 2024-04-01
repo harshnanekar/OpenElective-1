@@ -38,6 +38,7 @@ apiRouter.get('/downloadAllocationReport',middleware.verifyRequest,eventControll
 apiRouter.get('/programsList',middleware.verifyRequest,programController.programsList);
 apiRouter.get('/viewStudents',middleware.verifyRequest,controller.viewStudents);
 apiRouter.get('/editProfile',middleware.verifyRequest,controller.editProfile);
+apiRouter.get('/analytics',middleware.verifyRequest,eventController.analytics);
 
 //testing
 apiRouter.get('/getSvelte',controller.getSvelte)
@@ -78,7 +79,7 @@ apiRouter.post('/adminAllocatingEvents',middleware.verifyRequest,eventController
 apiRouter.post('/insertProfileDetails',middleware.verifyRequest,controller.insertProfileDetails);
 apiRouter.post('/sendEventMail',middleware.verifyRequest,eventController.sendEventMail);
 apiRouter.post('/checkEventBeforeSelection',middleware.verifyRequest,studentController.checkEventBeforeSelection)
-
+apiRouter.post('/fetchAnalyticsData',middleware.verifyRequest,eventController.fetchAnalyticsData);
 
 
 //testing0

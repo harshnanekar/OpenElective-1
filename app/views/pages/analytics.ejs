@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ('../partials/partial') %>
+    <title>Analytics</title>
+    
+    <style>
+      body{
+        background-color: whitesmoke;
+      }  
+      .selectDiv{
+        width:100%;
+      }
+      .graphicDiv{
+        background-color: white;
+        width:100%;
+        padding:20px;
+      }
+    </style>
+
+</head>
+<body>
+    <%- include('sidebar.ejs') %>
+    <%- include('header.ejs')  %>
+    <div id="main" class="container">
+      <div class="graphicDiv">
+        <canvas id="myChart" style="width:100%;"></canvas>
+        <hr/>
+      <div>
+
+      </div>
+      </div>
+    </div>
+</body>
+
+
+
+<%- include ('../partials/partial2') %>
+<script src= "../js/script.js" ></script>
+<script>
+
+    document.addEventListener('change',(e) => {
+        if(e.target.classList.contains('selectEvent')){
+          let eventId = e.target.value;
+
+          let eventError =document.getElementById('errorMessage');
+          let myChart = document.getElementById('myChart');
+
+          if(eventId === 'Select'){
+           myChart.classList.add('d-none');
+           eventError.classList.remove('d-none');
+          }else{
+            myChart.classList.remove('d-none');
+            eventError.classList.add('d-none');
+
+            let obj = {eventId};
+
+            dynamicFetchApi(`<%- BASE_URL %>elective/fetchAnalyticsData`, 'POST', obj)
+            .then(response => {
+              if(response.status === 'error'){
+               window.location.href = `${response.redirectTo}`;
+              } else{
+                if(response.eventRow > 0){
+                    myChart.classList.remove('d-none');
+                    eventError.classList.add('d-none');
+
+                    console.log(response)
+
+
+                }else{
+                    myChart.classList.add('d-none');
+                    eventError.classList.remove('d-none');   
+                }
+              } 
+            })
+          }
+        }
+    })
+
+
+const eventData = JSON.parse(`<%- event %>`);
+const xValues = eventData.map(event => event.event_name);
+const yValues = eventData.map(event => event.user_count);
+
+const barColors = eventData.map(event => getRandomColor());
+
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "Allocated Events",
+      fontSize: 25, 
+    fontColor: 'black', 
+    fontStyle: 'bold', 
+    padding:20
+
+    }
+  }
+});
+
+
+
+    </script>
+</html>

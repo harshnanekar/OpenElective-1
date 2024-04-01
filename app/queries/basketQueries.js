@@ -94,7 +94,7 @@ static checkAbbr(abbr){
 static assignedBasketCourse(basketId){
   let query = {
     text:`select s.subject_name,b.basket_name from basket_subject bs inner join subject_master s on bs.subject_lid=s.sub_id inner join basket b on
-    b.id=bs.basket_lid where bs.basket_lid=$1 and bs.active=true and s.active=true and b.active=true`,
+    b.id=bs.basket_lid where bs.basket_lid=$1 and bs.active=true and s.active=true and b.active=true order by s.subject_name asc`,
     values:[basketId]
   }
   return pgPool.query(query);
