@@ -39,7 +39,7 @@
                     <div id="collapse<%= data.id %>" class="collapse" aria-labelledby="heading<%= data.id %>" data-parent="#basketData">
                         <div class="card card-body subjectDisplay">
                             <% let count=1; %>
-                            <% if(data.subject_names.length > 0){ %>  
+                           <% if(data.subject_names && data.subject_names.length > 0){ %>
                             <% data.subject_names.forEach(subName => { %>
                                 <p><%= count %>. <%= subName.subject_name %></p>
                                 <% count++; %>

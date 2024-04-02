@@ -145,7 +145,6 @@ module.exports = {
 
       let userUrl = `https://portal.svkm.ac.in/usermgmtcrud/getAllProgramDetailsByUsername?username=${usermodules}`;
   
-      const body = { }
       const requestDetails = {
         method : 'GET',
         headers:{
