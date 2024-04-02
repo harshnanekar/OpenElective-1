@@ -134,7 +134,7 @@ module.exports = {
         );
 
         let redisData = await redisDb.set(
-          "basketData",
+          `basketData_${basketLid}`,
           JSON.stringify(basketObj),
           { EX: 2592000 }
         );

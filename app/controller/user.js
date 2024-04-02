@@ -168,10 +168,14 @@ module.exports = {
 
   logout: async function (req, res) {
     try {
+       
+      let username = session.Session.username;
+      let role = session.Session.userRole;
+
       req.session.destroy();
       res.clearCookie("jwtauth");
-      redisDb.del("user");
-      redisDb.del("role");
+      redisDb.del(`user_${username}`);
+      redisDb.del(`role_${role}`);
 
       return res.redirect(`${res.locals.BASE_URL}elective/loginPage`);
     } catch (err) {
