@@ -32,19 +32,21 @@ module.exports = {
 
       let username_session = session.Session.username;
       let role_session = session.Session.userRole;
-      console.log('username role in session ',username_session,role_session)
 
       console.log("SESSION IN MIDDLEWARE: ",{
         username_session,role_session
       });
 
+
       let verified = jwt.verify(cookietoken, token);
+
+      console.log("JWT IN MIDDLEWARE: ",verified.username);
       let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
 
       console.log('username and role in midlleware ',verified,username,role )
       
-      if (verified && username != undefined && role != undefined) {
+      if (verified.username == username_session) {
         next();
       } else {
         res.clearCookie("jwtauth");

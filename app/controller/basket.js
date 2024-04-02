@@ -9,11 +9,8 @@ const session = require("express-session");
 module.exports = {
   addBasketPage: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
       let eventId = req.query.id;
       console.log("eventId ", eventId);
@@ -43,11 +40,8 @@ module.exports = {
 
   createBasket: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
       let { basketName, basketAbbr, eventId } = req.body;
 
@@ -128,11 +122,8 @@ module.exports = {
 
   editBasket: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
       let { basket_id, basketName, basket_abbr, eventId } = req.body;
 
@@ -174,11 +165,9 @@ module.exports = {
 
   basketCourseConfig: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
+
       let eventLid = req.query.id;
 
       let getModules = await query.getModules(username);
@@ -221,11 +210,8 @@ module.exports = {
 
   insertBasketCourses: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
       let { basketId, basketCourses, compulsorySub } = req.body;
       console.log('basket courses')

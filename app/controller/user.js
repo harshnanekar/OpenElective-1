@@ -118,11 +118,9 @@ module.exports = {
   },
 
   errorPage: async function (req, res) {
-    let username_session = session.Session.username;
-    let role_session = session.Session.userRole;
-  
-  let username = await redisDb.get(`user_${username_session}`);
-    let user_role = await redisDb.get(`role_${role_session}`);
+    let username = session.Session.username;
+    let user_role = session.Session.userRole;
+
     let getModules = await query.getModules(username);
     return res.render("500", { module: getModules });
   },
@@ -171,7 +169,9 @@ module.exports = {
       let username = session.Session.username;
       let role = session.Session.userRole;
 
-      req.session.destroy();
+      session.Session.username = '';
+      session.Session.userRole = '';
+      
       res.clearCookie("jwtauth");
       redisDb.del(`user_${username}`);
       redisDb.del(`role_${role}`);
@@ -259,11 +259,9 @@ module.exports = {
 
   viewProfile: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
+      let username = session.Session.username;
+      let user_role = session.Session.userRole;
 	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let user_role = await redisDb.get(`role_${role_session}`);
       console.log("redis user ", username);
       let userdetails = await query.getUserDetails(username.trim());
       let modules = await query.getModules(username);
@@ -283,11 +281,9 @@ module.exports = {
 
   viewStudents: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let user_role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let user_role = session.Session.userRole;
+
       let modules = await query.getModules(username);
       let getStudentsList = await query.getStudents();
       let rowlength = getStudentsList.rowCount;
@@ -308,11 +304,9 @@ module.exports = {
 
   editProfile: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
+      let username = session.Session.username;
+      let user_role = session.Session.userRole;
 	  
-	    let username = await redisDb.get(`user_${username_session}`);
-      let user_role = await redisDb.get(`role_${role_session}`);
       let userdetails = await query.getUserDetails(username.trim());
       let modules = await query.getModules(username);
 

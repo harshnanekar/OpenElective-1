@@ -13,10 +13,8 @@ module.exports = {
   addCourses: async (req, res) => {
     try {
 
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-      
-      let username = await redisDb.get(`user_${username_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
         let getmodules = await userQuery.getModules(username);
         let campus = await query.getCampus();
@@ -34,13 +32,9 @@ module.exports = {
   insertCourseViaExcel: async (req, res) => {
     try {
 
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-
-      let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
-
-     
+      let username = session.Session.username;
+      let role = session.Session.userRole;
+   
         let file = req.file;
         if (file != undefined) {
            let subjectColumn = 'Subject_Name';
@@ -189,11 +183,9 @@ module.exports = {
   getAllCourses: async (req, res) => {
     try {
 
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
-      let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
      
         let courseData = await courseQuery.getCourses(username);
 
@@ -212,11 +204,9 @@ module.exports = {
   insertCourseManually: async (req, res) => {
     try {
 
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
-      let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
 
         let {
           subjectName,
@@ -303,11 +293,8 @@ module.exports = {
   allocatePrograms: async (req, res) => {
     try {
 
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	    let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
         let { programArray } = req.body;
         console.log("program array::: ", programArray);
@@ -378,11 +365,8 @@ module.exports = {
   getAllCoursePrograms: async (req, res) => {
     try {
 
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	    let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
     
         let { subId } = req.body;
         let coursePrograms = await courseQuery.getAllCourseProgram(subId);
@@ -402,12 +386,8 @@ module.exports = {
   editCourse: async (req, res) => {
     try {
       
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	    let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
-
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
         console.log("function called");
         let {

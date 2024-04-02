@@ -11,11 +11,8 @@ module.exports = {
   programs: async (req, res) => {
     try {
 
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	    let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
         let getmodules = await userQuery.getModules(username);
         let modules = await query.getChildModules(username, "Programs");
@@ -32,11 +29,8 @@ module.exports = {
   addPrograms: async (req, res) => {
     try {
 
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	    let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
         let getmodules = await userQuery.getModules(username);
         let campus = await query.getCampus();
@@ -56,11 +50,9 @@ module.exports = {
       console.log("Function called for excel");
 
 
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	    let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
+	
 
       let file = req.file;
 
@@ -176,11 +168,8 @@ module.exports = {
     try {
       console.log("function called");
 
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	    let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
         let { program, campus, programId } = req.body;
 
@@ -234,11 +223,8 @@ module.exports = {
   viewPrograms: async (req, res) => {
     try {
 
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	    let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
         let getmodules = await userQuery.getModules(username);
         let programData = await programQuery.viewPrograms(username);
@@ -261,11 +247,8 @@ module.exports = {
   getAllProgramsList: async (req, res) => {
     try {
 
-      let username_session = session.Session.username;
+      let username = session.Session.username;
       let role_session = session.Session.userRole;
-	  
-	    let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
       
         let getmodules = await userQuery.getModules(username);
         let programList = await programQuery.getAllProgramsList(username);

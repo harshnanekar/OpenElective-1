@@ -15,11 +15,9 @@ const session = require("express-session");
 let controller = {
   event: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 	  
-	    let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
       console.log("redis user ", username);
 
       let getmodules = await query.getModules(username);
@@ -37,11 +35,8 @@ let controller = {
 
   addEvent: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
       let modules = await query.getModules(username);
       let campus = await eventQuery.getCampus();
@@ -60,11 +55,8 @@ let controller = {
 
   eventData: async function (req, res) {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-    let user_role  = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
       console.log("event query");
       let { eventName, semester, acad_year, campus, start_date, end_date } =
@@ -137,11 +129,8 @@ let controller = {
 
   viewEvent: async function (req, res) {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
       let getmodules = await query.getModules(username);
       let eventData = await eventQuery.getAllEventData(username);
@@ -165,11 +154,8 @@ let controller = {
 
   registerStudent: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	    let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
       let getmodules = await query.getModules(username);
       let campus = await eventQuery.getCampus();
@@ -189,11 +175,8 @@ let controller = {
   uploadStudentData: async (req, res) => {
     try {
       console.log("File function called");
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let user_role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
       let file = req.file;
 
@@ -406,11 +389,8 @@ let controller = {
 
   registerStudentManually: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let user_role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let user_role = session.Session.userRole;
 
       let {
         fname,
@@ -588,11 +568,9 @@ let controller = {
 
   editEvent: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let role = session.Session.userRole;
+
 
       let {
         eventId,
@@ -711,11 +689,9 @@ let controller = {
 
   viewPreferences: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
+      let username = session.Session.username;
+      let user_role = session.Session.userRole;
 	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let user_role = await redisDb.get(`role_${role_session}`);
       let eventId = req.query.id;
       let modules = await query.getModules(username);
       let viewBasketPreference = await eventQuery.viewPreference(eventId);
@@ -731,11 +707,9 @@ let controller = {
 
   viewBasketPreference: async (req, res) => {
     try {
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
+      let username = session.Session.username;
+      let user_role = session.Session.userRole;
 	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let user_role = await redisDb.get(`role_${role_session}`);
       let basketId = req.query.id;
       let modules = await query.getModules(username);
       let viewBasketUser = await eventQuery.getBasketPreference(basketId);
@@ -890,11 +864,8 @@ let controller = {
 
     try {
 
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-	  
-	  let username = await redisDb.get(`user_${username_session}`);
-      let user_role = await redisDb.get(`role_${role_session}`);
+      let username = session.Session.username;
+      let user_role = session.Session.userRole;
 
       let getmodules = await query.getModules(username);      
       let eventData = await eventQuery.getAllocatedEvents();
