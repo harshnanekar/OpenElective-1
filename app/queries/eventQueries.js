@@ -97,8 +97,8 @@ const query = class EventQuery{
 
   static getBasketPreference(basketId){
    let query ={
-    text:`select sm.subject_name,u.username,s.sub_pref as preference from student_sub_allocation s inner join subject_master sm on s.subject_lid=sm.sub_id inner join user_info u on s.user_lid=u.id where s.basket_lid = $1
-    and s.active=true and sm.active=true and u.active=true order by s.id asc`,
+    text:`select sm.subject_name,u.username,s.sub_pref as preference,elective_time from student_sub_allocation s inner join subject_master sm on s.subject_lid=sm.sub_id inner join user_info u on s.user_lid=u.id where s.basket_lid = $1
+    and  u.active=true order by s.id asc`,
     values:[basketId]
    }
    return pgPool.query(query); 

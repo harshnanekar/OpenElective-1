@@ -743,7 +743,7 @@ let controller = {
       let basketId = req.query.id;
       let studentList = await eventQuery.getBasketPreference(basketId);
       if (studentList.rowCount > 0) {
-        let file = "D:/StudentsPreference.xlsx";
+        let file = "/data/StudentsPreference.xlsx";
         excelController.createExcel(studentList.rows, file);
 
         let filePath = path.resolve(__dirname, file);
