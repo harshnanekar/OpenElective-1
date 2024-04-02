@@ -115,10 +115,10 @@ const query = class EventQuery{
 
   static getAllocationReport(eventId){
     let query ={
-      text:`select u.username,s.subject_name,e.event_name,b.basket_name,f.elective_no,f.sub_pref,f.batch from final_allocation f inner join user_info u on f.user_lid=u.id 
-      inner join subject_master s on f.subject_lid=s.sub_id inner join event_master e on f.event_lid=e.id inner join basket b on f.basket_lid=b.id where f.event_lid=$1 and f.active=true 
-      and u.active=true and s.active=true and e.active=true and b.active=true order by username asc`,
-      values:[eventId]
+      text:`select u.username,s.subject_name,e.event_name,b.basket_name,f.elective_no,f.sub_pref,f.batch,(select elective_time from student_sub_allocation where event_lid=$1 and user_lid =u.id and basket_lid =b.id and subject_lid= s.sub_id) 
+      as elective_time from final_allocation f inner join user_info u on f.user_lid=u.id inner join subject_master s on f.subject_lid=s.sub_id inner join event_master e on f.event_lid=e.id inner join basket b on f.basket_lid=b.id 
+       where f.event_lid=$2 and f.active=true and u.active=true and s.active=true and e.active=true and b.active=true order by username asc`,
+      values:[eventId,eventId]
     }
     return pgPool.query(query);
   }
