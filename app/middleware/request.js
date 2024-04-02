@@ -31,6 +31,7 @@ module.exports = {
 
       let username_session = req.session.username;
       let role_session = req.session.userRole;
+      console.log('username role in session ',username_session,role_session)
 
       console.log("SESSION IN MIDDLEWARE: ",{
         username_session,role_session
@@ -41,6 +42,7 @@ module.exports = {
       let role = await redisDb.get(`role_${role_session}`);
 
       console.log('username and role in midlleware ',verified,username,role )
+      
       if (verified && username != undefined && role != undefined) {
         next();
       } else {
