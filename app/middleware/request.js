@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const controller = require("../controller/user.js");
 const { redisDb } = require("../config/database.js");
+const session = require("express-session");
 
 module.exports = {
   verifyLogin: (cookietoken, res) => {
@@ -29,8 +30,8 @@ module.exports = {
 
       console.log("request cookie", cookietoken);
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
       console.log('username role in session ',username_session,role_session)
 
       console.log("SESSION IN MIDDLEWARE: ",{
