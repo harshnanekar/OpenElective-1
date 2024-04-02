@@ -6,14 +6,15 @@ const validation = require("../controller/validation.js");
 const programQuery = require("../queries/programQueries.js");
 const Validation = require("../controller/validation.js");
 const {redisDb} = require("../config/database.js");
+const session = require("express-session");
 
 
 module.exports = {
   addCourses: async (req, res) => {
     try {
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
       
       let username = await redisDb.get(`user_${username_session}`);
 
@@ -33,8 +34,8 @@ module.exports = {
   insertCourseViaExcel: async (req, res) => {
     try {
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 
       let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -188,8 +189,8 @@ module.exports = {
   getAllCourses: async (req, res) => {
     try {
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 
       let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -211,8 +212,8 @@ module.exports = {
   insertCourseManually: async (req, res) => {
     try {
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 
       let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -302,8 +303,8 @@ module.exports = {
   allocatePrograms: async (req, res) => {
     try {
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	    let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -377,8 +378,8 @@ module.exports = {
   getAllCoursePrograms: async (req, res) => {
     try {
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	    let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -401,8 +402,8 @@ module.exports = {
   editCourse: async (req, res) => {
     try {
       
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	    let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);

@@ -4,12 +4,13 @@ const eventQuery = require("../queries/eventQueries.js");
 const validation = require("../controller/validation.js");
 const courseQuery = require("../queries/courseQuery.js");
 const { redisDb } = require("../config/database.js");
+const session = require("express-session");
 
 module.exports = {
   addBasketPage: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -42,8 +43,8 @@ module.exports = {
 
   createBasket: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -127,8 +128,8 @@ module.exports = {
 
   editBasket: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -173,8 +174,8 @@ module.exports = {
 
   basketCourseConfig: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -220,8 +221,8 @@ module.exports = {
 
   insertBasketCourses: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);

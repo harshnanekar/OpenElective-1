@@ -118,8 +118,8 @@ module.exports = {
   },
 
   errorPage: async function (req, res) {
-    let username_session = req.session.username;
-    let role_session = req.session.userRole;
+    let username_session = session.Session.username;
+    let role_session = session.Session.userRole;
   
   let username = await redisDb.get(`user_${username_session}`);
     let user_role = await redisDb.get(`role_${role_session}`);
@@ -256,8 +256,8 @@ module.exports = {
 
   viewProfile: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let user_role = await redisDb.get(`role_${role_session}`);
@@ -280,8 +280,8 @@ module.exports = {
 
   viewStudents: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let user_role = await redisDb.get(`role_${role_session}`);
@@ -305,8 +305,8 @@ module.exports = {
 
   editProfile: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	    let username = await redisDb.get(`user_${username_session}`);
       let user_role = await redisDb.get(`role_${role_session}`);

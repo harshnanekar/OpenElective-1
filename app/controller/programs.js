@@ -4,14 +4,15 @@ const programQuery = require("../queries/programQueries.js");
 const excelController = require("../controller/excel.js");
 const validationController = require("../controller/validation.js");
 const {redisDb} = require("../config/database.js");
+const session = require("express-session");
 
 
 module.exports = {
   programs: async (req, res) => {
     try {
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	    let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -31,8 +32,8 @@ module.exports = {
   addPrograms: async (req, res) => {
     try {
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	    let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -55,8 +56,8 @@ module.exports = {
       console.log("Function called for excel");
 
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	    let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -175,8 +176,8 @@ module.exports = {
     try {
       console.log("function called");
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	    let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -233,8 +234,8 @@ module.exports = {
   viewPrograms: async (req, res) => {
     try {
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	    let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -260,8 +261,8 @@ module.exports = {
   getAllProgramsList: async (req, res) => {
     try {
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	    let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);

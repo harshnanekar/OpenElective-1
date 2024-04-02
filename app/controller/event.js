@@ -8,14 +8,15 @@ const student = require("./student.js");
 const emailController = require("../controller/email.js");
 const os = require('os');
 const { Console } = require("console");
+const session = require("express-session");
 
 
 
 let controller = {
   event: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	    let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -36,8 +37,8 @@ let controller = {
 
   addEvent: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -59,8 +60,8 @@ let controller = {
 
   eventData: async function (req, res) {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
     let user_role  = await redisDb.get(`role_${role_session}`);
@@ -136,8 +137,8 @@ let controller = {
 
   viewEvent: async function (req, res) {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -164,8 +165,8 @@ let controller = {
 
   registerStudent: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	    let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -188,8 +189,8 @@ let controller = {
   uploadStudentData: async (req, res) => {
     try {
       console.log("File function called");
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let user_role = await redisDb.get(`role_${role_session}`);
@@ -405,8 +406,8 @@ let controller = {
 
   registerStudentManually: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let user_role = await redisDb.get(`role_${role_session}`);
@@ -587,8 +588,8 @@ let controller = {
 
   editEvent: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let role = await redisDb.get(`role_${role_session}`);
@@ -710,8 +711,8 @@ let controller = {
 
   viewPreferences: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let user_role = await redisDb.get(`role_${role_session}`);
@@ -730,8 +731,8 @@ let controller = {
 
   viewBasketPreference: async (req, res) => {
     try {
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let user_role = await redisDb.get(`role_${role_session}`);
@@ -889,8 +890,8 @@ let controller = {
 
     try {
 
-      let username_session = req.session.username;
-      let role_session = req.session.userRole;
+      let username_session = session.Session.username;
+      let role_session = session.Session.userRole;
 	  
 	  let username = await redisDb.get(`user_${username_session}`);
       let user_role = await redisDb.get(`role_${role_session}`);
