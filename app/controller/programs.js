@@ -4,15 +4,16 @@ const programQuery = require("../queries/programQueries.js");
 const excelController = require("../controller/excel.js");
 const validationController = require("../controller/validation.js");
 const {redisDb} = require("../config/database.js");
-const session = require("express-session");
+const jwtauth = require("../middleware/request.js");
 
 
 module.exports = {
   programs: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
         let getmodules = await userQuery.getModules(username);
         let modules = await query.getChildModules(username, "Programs");
@@ -29,8 +30,9 @@ module.exports = {
   addPrograms: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
         let getmodules = await userQuery.getModules(username);
         let campus = await query.getCampus();
@@ -50,8 +52,9 @@ module.exports = {
       console.log("Function called for excel");
 
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 	
 
       let file = req.file;
@@ -168,8 +171,9 @@ module.exports = {
     try {
       console.log("function called");
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
         let { program, campus, programId } = req.body;
 
@@ -223,8 +227,9 @@ module.exports = {
   viewPrograms: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
         let getmodules = await userQuery.getModules(username);
         let programData = await programQuery.viewPrograms(username);
@@ -247,8 +252,9 @@ module.exports = {
   getAllProgramsList: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role_session = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
       
         let getmodules = await userQuery.getModules(username);
         let programList = await programQuery.getAllProgramsList(username);

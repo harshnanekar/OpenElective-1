@@ -4,13 +4,15 @@ const eventQuery = require("../queries/eventQueries.js");
 const validation = require("../controller/validation.js");
 const courseQuery = require("../queries/courseQuery.js");
 const { redisDb } = require("../config/database.js");
-const session = require("express-session");
+const jwtauth = require("../middleware/request.js");
+
 
 module.exports = {
   addBasketPage: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       let eventId = req.query.id;
       console.log("eventId ", eventId);
@@ -40,8 +42,9 @@ module.exports = {
 
   createBasket: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       let { basketName, basketAbbr, eventId } = req.body;
 
@@ -122,8 +125,9 @@ module.exports = {
 
   editBasket: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       let { basket_id, basketName, basket_abbr, eventId } = req.body;
 
@@ -165,8 +169,9 @@ module.exports = {
 
   basketCourseConfig: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       let eventLid = req.query.id;
 
@@ -210,8 +215,9 @@ module.exports = {
 
   insertBasketCourses: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       let { basketId, basketCourses, compulsorySub } = req.body;
       console.log('basket courses')

@@ -6,15 +6,16 @@ const validation = require("../controller/validation.js");
 const programQuery = require("../queries/programQueries.js");
 const Validation = require("../controller/validation.js");
 const {redisDb} = require("../config/database.js");
-const session = require("express-session");
+const jwtauth = require("../middleware/request.js");
 
 
 module.exports = {
   addCourses: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
         let getmodules = await userQuery.getModules(username);
         let campus = await query.getCampus();
@@ -32,8 +33,9 @@ module.exports = {
   insertCourseViaExcel: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
    
         let file = req.file;
         if (file != undefined) {
@@ -183,8 +185,9 @@ module.exports = {
   getAllCourses: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
      
         let courseData = await courseQuery.getCourses(username);
@@ -204,8 +207,9 @@ module.exports = {
   insertCourseManually: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
 
         let {
@@ -293,8 +297,9 @@ module.exports = {
   allocatePrograms: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
         let { programArray } = req.body;
         console.log("program array::: ", programArray);
@@ -365,8 +370,9 @@ module.exports = {
   getAllCoursePrograms: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
     
         let { subId } = req.body;
         let coursePrograms = await courseQuery.getAllCourseProgram(subId);
@@ -386,8 +392,9 @@ module.exports = {
   editCourse: async (req, res) => {
     try {
       
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
         console.log("function called");
         let {

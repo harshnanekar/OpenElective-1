@@ -3,15 +3,16 @@ const userQuery = require("../queries/user.js");
 const validationController = require("../controller/validation.js");
 const {redisDb} = require("../config/database.js");
 const eventQuery = require('../queries/eventQueries.js');
-const session = require("express-session");
+const jwtauth = require("../middleware/request.js");
 const { event } = require('./event.js');
 
 module.exports = {
   viewStudentEvents: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
 
         let getStudentEvent = await studentQuery.getStudentEvent(username);
@@ -31,8 +32,9 @@ module.exports = {
     try {
         let { eventId } = req.body;
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+        let obj = await  jwtauth.getUserObj(req, res);
+        let username = obj.username
+        let role = obj.role
 
         let getEvent = await eventQuery.getEventData(eventId);
         let checkEventSelected = await eventQuery.checkEventSelected(eventId,username);
@@ -72,8 +74,9 @@ module.exports = {
   startCourseSelection: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
         let eventId = req.query.id;
 
@@ -101,8 +104,9 @@ module.exports = {
   insertStudentCourses: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
     
         let { eventLid, timeString, courseArray, userLid, basketLid } =
           req.body;
@@ -162,8 +166,9 @@ module.exports = {
   viewStudentElectedEvents: async (req, res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
     
         let eventId = req.query.id;
@@ -185,8 +190,9 @@ module.exports = {
   viewElectedEvents: async (req,res) => {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
      let electedEvents = await studentQuery.viewStudentElectedEvent(username); 
      let rowlength = electedEvents.length;

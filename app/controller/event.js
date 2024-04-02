@@ -7,16 +7,17 @@ const path = require('path');
 const student = require("./student.js");
 const emailController = require("../controller/email.js");
 const os = require('os');
-const { Console } = require("console");
-const session = require("express-session");
+const jwtauth = require("../middleware/request.js");
+
 
 
 
 let controller = {
   event: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 	  
       console.log("redis user ", username);
 
@@ -35,8 +36,9 @@ let controller = {
 
   addEvent: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       let modules = await query.getModules(username);
       let campus = await eventQuery.getCampus();
@@ -55,8 +57,9 @@ let controller = {
 
   eventData: async function (req, res) {
     try {
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       console.log("event query");
       let { eventName, semester, acad_year, campus, start_date, end_date } =
@@ -90,7 +93,7 @@ let controller = {
             username,
           });
 
-          if (user_role === "Role_Admin") {
+          if (role === "Role_Admin") {
             let query = await eventQuery.addEventdata(jsonData);
 
             console.log("query return--- ", query);
@@ -129,8 +132,9 @@ let controller = {
 
   viewEvent: async function (req, res) {
     try {
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       let getmodules = await query.getModules(username);
       let eventData = await eventQuery.getAllEventData(username);
@@ -154,8 +158,9 @@ let controller = {
 
   registerStudent: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       let getmodules = await query.getModules(username);
       let campus = await eventQuery.getCampus();
@@ -175,8 +180,9 @@ let controller = {
   uploadStudentData: async (req, res) => {
     try {
       console.log("File function called");
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       let file = req.file;
 
@@ -351,7 +357,7 @@ let controller = {
 
           console.log("studentArray :::::::::::::::::::::::",studentArray);
 
-          if (user_role === "Role_Admin") {
+          if (role === "Role_Admin") {
             let registerStudentCall = await eventQuery.registerStudentExcel({studentArray});
             console.log("registerStudentCall:::::::::::", registerStudentCall);
 
@@ -389,8 +395,9 @@ let controller = {
 
   registerStudentManually: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let user_role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       let {
         fname,
@@ -497,7 +504,7 @@ let controller = {
 
       console.log('manual array ', JSON.stringify(studentArray))
 
-        if (user_role === "Role_Admin") {
+        if (role === "Role_Admin") {
           let registerManually = await eventQuery.registerStudentExcel({
             studentArray
           });
@@ -568,8 +575,9 @@ let controller = {
 
   editEvent: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
 
       let {
@@ -689,8 +697,9 @@ let controller = {
 
   viewPreferences: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let user_role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 	  
       let eventId = req.query.id;
       let modules = await query.getModules(username);
@@ -707,8 +716,9 @@ let controller = {
 
   viewBasketPreference: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let user_role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 	  
       let basketId = req.query.id;
       let modules = await query.getModules(username);
@@ -864,8 +874,9 @@ let controller = {
 
     try {
 
-      let username = session.Session.username;
-      let user_role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       let getmodules = await query.getModules(username);      
       let eventData = await eventQuery.getAllocatedEvents();

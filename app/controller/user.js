@@ -7,7 +7,6 @@ const { redisDb } = require("../config/database.js");
 const mail = require("../controller/email.js");
 const validation = require('../controller/validation.js');
 const fetch = require('node-fetch');
-const session = require("express-session");
 
 
 module.exports = {
@@ -18,8 +17,10 @@ module.exports = {
       if (jwtreturn === "invalid") {
         res.render("login");
       } else {
-        let username = req.session.username;
-        let role = req.session.userRole;
+
+        let obj = await  jwtauth.getUserObj(req, res);
+        let username = obj.username
+        let role = obj.role
 
         console.log({
           username,role
@@ -53,11 +54,6 @@ module.exports = {
 
         if (passwordVal) {
           let getUserRole = await query.getUserRole(username);
-
-          console.log("Authenticated Successfully ", req.session.userRole);
-
-          session.Session.username = querydata[0].username;
-          session.Session.userRole = getUserRole[0].role_name;
 
           let redisUser = querydata[0].username;
           let redisRole = getUserRole[0].role_name;
@@ -118,8 +114,9 @@ module.exports = {
   },
 
   errorPage: async function (req, res) {
-    let username = session.Session.username;
-    let user_role = session.Session.userRole;
+    let obj = await  jwtauth.getUserObj(req, res);
+    let username = obj.username
+    let role = obj.role
 
     let getModules = await query.getModules(username);
     return res.render("500", { module: getModules });
@@ -128,10 +125,12 @@ module.exports = {
   dashboard: async function (req, res, next) {
     try {
 
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
 
-      console.log("SESSION APPLIED : ", username);
+      let username = obj.username
+      let role = obj.role
+
+      console.log("OBJ APPLIED : ", username);
 
       console.log("GET DASHBOARD : ",{
         username,role
@@ -166,12 +165,10 @@ module.exports = {
   logout: async function (req, res) {
     try {
        
-      let username = session.Session.username;
-      let role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
-      session.Session.username = '';
-      session.Session.userRole = '';
-      
       res.clearCookie("jwtauth");
       redisDb.del(`user_${username}`);
       redisDb.del(`role_${role}`);
@@ -259,8 +256,9 @@ module.exports = {
 
   viewProfile: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let user_role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 	  
       console.log("redis user ", username);
       let userdetails = await query.getUserDetails(username.trim());
@@ -281,8 +279,9 @@ module.exports = {
 
   viewStudents: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let user_role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 
       let modules = await query.getModules(username);
       let getStudentsList = await query.getStudents();
@@ -304,8 +303,9 @@ module.exports = {
 
   editProfile: async (req, res) => {
     try {
-      let username = session.Session.username;
-      let user_role = session.Session.userRole;
+      let obj = await  jwtauth.getUserObj(req, res);
+      let username = obj.username
+      let role = obj.role
 	  
       let userdetails = await query.getUserDetails(username.trim());
       let modules = await query.getModules(username);

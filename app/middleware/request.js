@@ -23,30 +23,28 @@ module.exports = {
     }
   },
 
+  getUserObj : async(req, res) => {
+    let token = process.env.JWT_SECRETKEY;
+    let cookietoken = req.signedCookies.jwtauth || undefined;
+
+    let verified = jwt.verify(cookietoken, token);
+    let username = verified.username;
+    let role = verified.role[0].role_name;
+    return {username , role}
+  },
+
   verifyRequest: async (req, res, next) => {
     try {
       let token = process.env.JWT_SECRETKEY;
       let cookietoken = req.signedCookies.jwtauth || undefined;
 
-      console.log("request cookie", cookietoken);
-
-      let username_session = session.Session.username;
-      let role_session = session.Session.userRole;
-
-      console.log("SESSION IN MIDDLEWARE: ",{
-        username_session,role_session
-      });
-
-
       let verified = jwt.verify(cookietoken, token);
+      let username_session = verified.username;
+      let role_session = verified.role[0].role_name;
 
-      console.log("JWT IN MIDDLEWARE: ",verified.username);
-      let username = await redisDb.get(`user_${username_session}`);
-      let role = await redisDb.get(`role_${role_session}`);
-
-      console.log('username and role in midlleware ',verified,username,role )
+      console.log("JWT IN MIDDLEWARE: ",verified);
       
-      if (verified.username == username_session) {
+      if (verified) {
         next();
       } else {
         res.clearCookie("jwtauth");
