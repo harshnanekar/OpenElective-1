@@ -7,6 +7,7 @@ const { redisDb } = require("../config/database.js");
 const mail = require("../controller/email.js");
 const validation = require('../controller/validation.js');
 const fetch = require('node-fetch');
+const session = require("express-session");
 
 
 module.exports = {
@@ -52,11 +53,11 @@ module.exports = {
 
         if (passwordVal) {
           let getUserRole = await query.getUserRole(username);
-          req.session.userRole = getUserRole[0].role_name;
 
           console.log("Authenticated Successfully ", req.session.userRole);
 
-          req.session.username = querydata[0].username;
+          session.Session.username = querydata[0].username;
+          session.Session.userRole = getUserRole[0].role_name;
 
           let redisUser = querydata[0].username;
           let redisRole = getUserRole[0].role_name;
@@ -129,10 +130,10 @@ module.exports = {
   dashboard: async function (req, res, next) {
     try {
 
-      let username = req.session.username;
-      let role = req.session.userRole;
+      let username = session.Session.username;
+      let role = session.Session.userRole;
 
-      
+      console.log("SESSION APPLIED : ", username);
 
       console.log("GET DASHBOARD : ",{
         username,role
