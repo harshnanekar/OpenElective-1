@@ -791,7 +791,7 @@ let controller = {
       console.log('allocation data ',allocationData.rowCount)
 
       if (allocationData.rowCount > 0) {
-        let file = "D:/AllocationReport.xlsx";
+        let file = "data:/AllocationReport.xlsx";
         excelController.createExcel(allocationData.rows, file);
 
         let filePath = path.resolve(__dirname, file);
