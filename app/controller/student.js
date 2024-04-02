@@ -157,7 +157,7 @@ module.exports = {
             yearBackSubjects: yearBackSubjects.rows,
           });
         } else {
-          let redisBasketData = await redisDb.get("basketData");
+          let redisBasketData = await redisDb.get(`basketData_${basketLid}`);
           await studentQuery.insertStudentCourse(
             JSON.stringify(redisBasketData)
           );
