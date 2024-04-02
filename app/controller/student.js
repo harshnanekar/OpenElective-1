@@ -7,7 +7,13 @@ const eventQuery = require('../queries/eventQueries.js');
 module.exports = {
   viewStudentEvents: async (req, res) => {
     try {
-        let username = await redisDb.get('user');
+
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
+
         let getStudentEvent = await studentQuery.getStudentEvent(username);
         let getmodules = await userQuery.getModules(username);
 
@@ -24,7 +30,12 @@ module.exports = {
   checkEventBeforeSelection: async (req, res) => {
     try {
         let { eventId } = req.body;
-        let username = await redisDb.get('user');
+
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
 
         let getEvent = await eventQuery.getEventData(eventId);
         let checkEventSelected = await eventQuery.checkEventSelected(eventId,username);
@@ -63,7 +74,13 @@ module.exports = {
 
   startCourseSelection: async (req, res) => {
     try {
-      let username = await redisDb.get('user');
+
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
+
         let eventId = req.query.id;
 
 
@@ -89,7 +106,12 @@ module.exports = {
 
   insertStudentCourses: async (req, res) => {
     try {
-      let username = await redisDb.get('user');
+
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
     
         let { eventLid, timeString, courseArray, userLid, basketLid } =
           req.body;
@@ -148,7 +170,12 @@ module.exports = {
 
   viewStudentElectedEvents: async (req, res) => {
     try {
-        let username = await redisDb.get('user');
+
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
     
         let eventId = req.query.id;
         let getModules = await userQuery.getModules(username);
@@ -169,7 +196,11 @@ module.exports = {
   viewElectedEvents: async (req,res) => {
     try {
 
-     let username = await redisDb.get('user');
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
 
      let electedEvents = await studentQuery.viewStudentElectedEvent(username); 
      let rowlength = electedEvents.length;

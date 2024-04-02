@@ -9,7 +9,12 @@ const {redisDb} = require("../config/database.js");
 module.exports = {
   programs: async (req, res) => {
     try {
-      let username = await redisDb.get('user');
+
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
 
         let getmodules = await userQuery.getModules(username);
         let modules = await query.getChildModules(username, "Programs");
@@ -25,7 +30,13 @@ module.exports = {
 
   addPrograms: async (req, res) => {
     try {
-        let username = await redisDb.get('user');
+
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
+
         let getmodules = await userQuery.getModules(username);
         let campus = await query.getCampus();
 
@@ -42,8 +53,13 @@ module.exports = {
   insertProgramsViaExcel: async (req, res) => {
     try {
       console.log("Function called for excel");
-      let username = await redisDb.get('user');
-      let role = await redisDb.get('role');
+
+
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
 
       let file = req.file;
 
@@ -159,8 +175,12 @@ module.exports = {
     try {
       console.log("function called");
 
-      let username = await redisDb.get('user');
-      let userRole = await redisDb.get('role');
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
+
         let { program, campus, programId } = req.body;
 
         console.log("request body:: ", program, campus, programId);
@@ -212,7 +232,12 @@ module.exports = {
 
   viewPrograms: async (req, res) => {
     try {
-      let username = await redisDb.get('user');
+
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
 
         let getmodules = await userQuery.getModules(username);
         let programData = await programQuery.viewPrograms(username);
@@ -234,7 +259,13 @@ module.exports = {
 
   getAllProgramsList: async (req, res) => {
     try {
-        let username = await redisDb.get('user');
+
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
+      
         let getmodules = await userQuery.getModules(username);
         let programList = await programQuery.getAllProgramsList(username);
         return res.render("programList", {

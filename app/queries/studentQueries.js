@@ -15,25 +15,34 @@ module.exports = class Student {
   static displayBasket(eventId, username) {
     let query = {
       text: `
-   select bsk.id,s.sub_id,bsk.basket_name,s.subject_name,be.basket_elective_no,be.event_lid,be.no_of_comp_sub,e.event_name from basket_subject bs inner join basket_event be on bs.basket_lid=be.basket_lid 
-   inner join subject_master s on bs.subject_lid = s.sub_id inner join basket bsk on bsk.id=be.basket_lid inner join event_master e on e.id=be.event_lid where be.basket_lid in 
-   (select basket_lid 
-   from basket_event 
-   where basket_lid not in (
-    select DISTINCT bs.basket_lid 
-    FROM student_sub_allocation s 
-    inner JOIN basket_subject bs ON s.subject_lid = bs.subject_lid 
-    inner JOIN user_info u ON s.user_lid = u.id 
-    where s.event_lid = $1 
-    and s.active = true 
-    and bs.active = true 
-    and u.username = $2
-   ) 
-	and event_lid = $3
-	and active = true 
-	order BY basket_elective_no asc 
-	limit 1) and bs.active=true and be.active=true and bsk.active = true order by be.basket_elective_no asc`,
-      values: [eventId, username, eventId],
+      select bsk.id,s.sub_id,bsk.basket_name,s.subject_name,be.basket_elective_no,be.event_lid,be.no_of_comp_sub,e.event_name from basket_subject bs 
+      inner join basket_event be on bs.basket_lid=be.basket_lid 
+      inner join subject_master s on bs.subject_lid = s.sub_id 
+      INNER JOIN subject_program_mapping spm ON s.sub_id = spm.subject_lid
+      INNER JOIN student_info si ON si.program_id = spm.program_lid::VARCHAR
+      inner join basket bsk on bsk.id=be.basket_lid 
+      inner join event_master e on e.id=be.event_lid  
+      where be.basket_lid in 
+        (select basket_lid 
+        from basket_event 
+        where basket_lid not in (
+         select DISTINCT bs.basket_lid 
+         FROM student_sub_allocation s 
+         inner JOIN basket_subject bs ON s.subject_lid = bs.subject_lid 
+         inner JOIN user_info u ON s.user_lid = u.id 
+         where s.event_lid = $1 
+         and s.active = true 
+         and bs.active = true 
+         and u.username = $2
+        ) 
+       and event_lid = $3
+       and active = true 
+       order BY basket_elective_no asc 
+       limit 1) AND si.user_lid = (SELECT id FROM user_info where username = $4) 
+       and bs.active=true and be.active=true and bsk.active = true
+       AND s.active = true AND spm.active = true
+       order by be.basket_elective_no asc`,
+      values: [eventId, username, eventId, username],
     };
     return pgPool.query(query);
   }

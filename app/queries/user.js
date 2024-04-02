@@ -99,6 +99,14 @@ const a = class data{
       return pgPool.query(query);
     }
 
+    static updateProgramId(username,programId){
+    let query = {
+     text:`update student_info set program_id=$1 where user_lid in (select id from user_info where username = $2)`,
+     values:[programId,username]
+    }
+    return pgPool.query(query);
+    }
+
 
     //testing
     static getStudentForTest(acadLid){

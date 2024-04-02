@@ -29,9 +29,16 @@ module.exports = {
 
       console.log("request cookie", cookietoken);
 
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+
+      console.log("SESSION IN MIDDLEWARE: ",{
+        username_session,role_session
+      });
+
       let verified = jwt.verify(cookietoken, token);
-      let username = await redisDb.get("user");
-      let role = await redisDb.get("role");
+      let username = await redisDb.get(`user_${username_session}`);
+      let role = await redisDb.get(`role_${role_session}`);
 
       if (verified && username != undefined && role != undefined) {
         next();

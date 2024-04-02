@@ -1,11 +1,13 @@
 let query = require("../queries/user.js");
-const { get } = require("../router/route.js");
+const { get, use } = require("../router/route.js");
 const jwt = require("jsonwebtoken");
 const jwtauth = require("../middleware/request.js");
 const passwordClass = require("../middleware/password.js");
 const { redisDb } = require("../config/database.js");
 const mail = require("../controller/email.js");
 const validation = require('../controller/validation.js');
+const fetch = require('node-fetch');
+
 
 module.exports = {
   loginPage: async function (req, res) {
@@ -15,8 +17,15 @@ module.exports = {
       if (jwtreturn === "invalid") {
         res.render("login");
       } else {
-        redisDb.set("user", jwtreturn.username, "EX", 86400);
-        redisDb.set("role", jwtreturn.role[0].role_name, "EX", 86400);
+        let username = req.session.username;
+        let role = req.session.userRole;
+
+        console.log({
+          username,role
+        });
+
+        redisDb.set(`user_${username}`, jwtreturn.username, "EX", 86400);
+        redisDb.set(`role_${role}`, jwtreturn.role[0].role_name, "EX", 86400);
 
         return res.redirect(`${res.locals.BASE_URL}elective/dashboard`);
       }
@@ -47,12 +56,17 @@ module.exports = {
 
           console.log("Authenticated Successfully ", req.session.userRole);
 
-          req.session.modules = querydata[0].username;
+          req.session.username = querydata[0].username;
 
           let redisUser = querydata[0].username;
           let redisRole = getUserRole[0].role_name;
-          redisDb.set("user", redisUser, "EX", 86400);
-          redisDb.set("role", redisRole, "EX", 86400);
+
+          console.log("REDIES SET :",{
+            redisUser,redisRole
+          });
+
+          redisDb.set(`user_${redisUser}`, redisUser, "EX", 86400);
+          redisDb.set(`role_${redisRole}`, redisRole, "EX", 86400);
 
           const user = querydata[0].username;
           const secretkey = process.env.JWT_SECRETKEY;
@@ -70,6 +84,9 @@ module.exports = {
             path: "/",
             httponly: true,
           });
+
+          console.log("URL : ",res.locals.BASE_URL);
+
           return res.json({
             status: "success",
             redirectTo: `${res.locals.BASE_URL}elective/dashboard`,
@@ -100,18 +117,50 @@ module.exports = {
   },
 
   errorPage: async function (req, res) {
-    let username = await redisDb.get("user");
+    let username_session = req.session.username;
+    let role_session = req.session.userRole;
+  
+  let username = await redisDb.get(`user_${username_session}`);
+    let user_role = await redisDb.get(`role_${role_session}`);
     let getModules = await query.getModules(username);
     return res.render("500", { module: getModules });
   },
 
   dashboard: async function (req, res, next) {
     try {
-      let usermodules = await redisDb.get("user");
 
+      let username = req.session.username;
+      let role = req.session.userRole;
+
+      
+
+      console.log("GET DASHBOARD : ",{
+        username,role
+      });
+
+      let usermodules = await redisDb.get(`user_${username}`);
+
+      if(role === 'Role_Student') {
+
+      let userUrl = `https://portal.svkm.ac.in/usermgmtcrud/getAllProgramDetailsByUsername?username=${usermodules}`;
+  
+      const body = { }
+      const requestDetails = {
+        method : 'GET',
+        headers:{
+        "Content-Type": "application/json"
+        }
+      }
+
+      const response = await fetch(`${userUrl}`,requestDetails);
+      let program_id = await response.json();
+      console.log("response::::::::::",program_id[0].id);
+      let updateProgramid = await query.updateProgramId(usermodules,program_id[0].id);
+    }
       let getModules = await query.getModules(usermodules);
       return res.render("dashboard", { module: getModules });
     } catch (err) {
+      console.log("ERROR IN dashboard : ",err);
       return res.redirect(`${res.locals.BASE_URL}elective/error`);
     }
   },
@@ -206,7 +255,11 @@ module.exports = {
 
   viewProfile: async (req, res) => {
     try {
-      let username = await redisDb.get("user");
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	  let username = await redisDb.get(`user_${username_session}`);
+      let user_role = await redisDb.get(`role_${role_session}`);
       console.log("redis user ", username);
       let userdetails = await query.getUserDetails(username.trim());
       let modules = await query.getModules(username);
@@ -226,7 +279,11 @@ module.exports = {
 
   viewStudents: async (req, res) => {
     try {
-      let username = await redisDb.get("user");
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	  let username = await redisDb.get(`user_${username_session}`);
+      let user_role = await redisDb.get(`role_${role_session}`);
       let modules = await query.getModules(username);
       let getStudentsList = await query.getStudents();
       let rowlength = getStudentsList.rowCount;
@@ -247,7 +304,11 @@ module.exports = {
 
   editProfile: async (req, res) => {
     try {
-      let username = await redisDb.get("user");
+      let username_session = req.session.username;
+      let role_session = req.session.userRole;
+	  
+	    let username = await redisDb.get(`user_${username_session}`);
+      let user_role = await redisDb.get(`role_${role_session}`);
       let userdetails = await query.getUserDetails(username.trim());
       let modules = await query.getModules(username);
 
