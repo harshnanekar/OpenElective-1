@@ -4,6 +4,7 @@ const validationController = require("../controller/validation.js");
 const {redisDb} = require("../config/database.js");
 const eventQuery = require('../queries/eventQueries.js');
 const session = require("express-session");
+const { event } = require('./event.js');
 
 module.exports = {
   viewStudentEvents: async (req, res) => {
@@ -134,7 +135,7 @@ module.exports = {
         );
 
         let redisData = await redisDb.set(
-          `basketData_${basketLid}`,
+          `basketData_${basketLid}_${userLid}_${eventLid}`,
           JSON.stringify(basketObj),
           { EX: 2592000 }
         );
@@ -157,7 +158,7 @@ module.exports = {
             yearBackSubjects: yearBackSubjects.rows,
           });
         } else {
-          let redisBasketData = await redisDb.get(`basketData_${basketLid}`);
+          let redisBasketData = await redisDb.get(`basketData_${basketLid}_${userLid}_${eventLid}`);
           await studentQuery.insertStudentCourse(
             JSON.stringify(redisBasketData)
           );
