@@ -340,7 +340,8 @@ module.exports = {
 
   commonCourseDelete: async (req, res) => {
     try {
-      let role = await redisDb.get('role');
+      let obj = await  jwtauth.getUserObj(req, res);
+      let role = obj.role
 
         let { courseArray } = req.body;
 
@@ -510,8 +511,9 @@ module.exports = {
 
   deleteCourse: async (req, res) => {
     try {
-      let role = await redisDb.get('role');
-
+      let obj = await  jwtauth.getUserObj(req, res);
+      let role = obj.role
+      
       console.log('delete api called')
 
         if (role === "Role_Admin") {

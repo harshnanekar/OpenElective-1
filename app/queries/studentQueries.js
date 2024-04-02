@@ -73,10 +73,10 @@ module.exports = class Student {
       text: `SELECT b.id, b.basket_name, (
         SELECT json_agg(row_to_json(s))
         FROM (
-           SELECT subject_name
+           SELECT subject_name,preferred_subjects.elective_time
 			FROM subject_master
 			JOIN (
-				SELECT sm.subject_lid, sm.sub_pref
+				SELECT sm.subject_lid, sm.sub_pref,sm.elective_time
 				FROM student_sub_allocation sm 
 				WHERE sm.event_lid = $1 AND sm.basket_lid = b.id
 				AND sm.user_lid IN (SELECT id FROM user_info WHERE username = $2)

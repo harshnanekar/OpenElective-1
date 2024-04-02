@@ -13,11 +13,11 @@ module.exports =class Excel {
    return excelJson;
  }
 
- static createExcel(data,excelFileName){
+ static createExcel(data,excelFileName,sheetName){
     
   let excelJson = excel.utils.json_to_sheet(data);
   let workbook = excel.utils.book_new();
-  excel.utils.book_append_sheet(workbook,excelJson,'exceljson');
+  excel.utils.book_append_sheet(workbook,excelJson,sheetName);
   excel.writeFile(workbook,excelFileName)
    
  }

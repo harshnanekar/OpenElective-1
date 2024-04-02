@@ -41,7 +41,7 @@
                             <% let count=1; %>
                            <% if(data.subject_names && data.subject_names.length > 0){ %>
                             <% data.subject_names.forEach(subName => { %>
-                                <p><%= count %>. <%= subName.subject_name %></p>
+                                <p><%= count %>. <%= subName.subject_name %> - <%= subName.elective_time %></p>
                                 <% count++; %>
                             <% }); %>   
                             <% }else{ %>

@@ -91,8 +91,8 @@ module.exports = {
 
   deleteBasket: async (req, res) => {
     try {
-      let role = await redisDb.get("role");
-
+      let obj = await  jwtauth.getUserObj(req, res);
+      let role = obj.role
       let { basketId } = req.body;
 
       if (role === "Role_Admin") {
@@ -281,8 +281,9 @@ module.exports = {
 
   deleteEventBasket: async (req, res) => {
     try {
-      let role = await redisDb.get("role");
-
+      let obj = await  jwtauth.getUserObj(req, res);
+      let role = obj.role
+      
       let { basketId } = req.body;
 
       if (role === "Role_Admin") {

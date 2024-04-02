@@ -270,7 +270,8 @@ module.exports = {
 
   deleteProgram: async (req, res) => {
     try {
-      let role = await redisDb.get('role');
+      let obj = await  jwtauth.getUserObj(req, res);
+      let role = obj.role
 
         let { programId } = req.body;
         console.log("delete program ", programId);

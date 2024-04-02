@@ -201,6 +201,18 @@ const query = class EventQuery{
     return pgPool.query(query)
   }
 
+  static getUnallocationReport(eventId){
+    let query = {
+      text:`select p.program_name,u.username,u.firstname,u.lastname,si.rollno from user_info u
+      INNER JOIN student_info si on si.user_lid = u.id
+      INNER JOIN program_master p on p.program_id=si.program_id
+      where u.id in (select distinct user_lid from unallocated_students where event_lid =$1 and active=true) and 
+      si.active=true and p.active=true and u.active=true`,
+      values:[eventId]
+    }
+    return pgPool.query(query)
+  }
+
 
 }
 

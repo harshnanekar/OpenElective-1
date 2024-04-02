@@ -8,6 +8,7 @@ const student = require("./student.js");
 const emailController = require("../controller/email.js");
 const os = require('os');
 const jwtauth = require("../middleware/request.js");
+const excel = require('xlsx');
 
 
 
@@ -543,7 +544,8 @@ let controller = {
 
   deleteEvent: async (req, res) => {
     try {
-      let role = await redisDb.get("role");
+      let obj = await  jwtauth.getUserObj(req, res);
+      let role = obj.role
 
       let { eventId } = req.body;
 
@@ -788,11 +790,22 @@ let controller = {
     try {
       let eventId = req.query.id;
       let allocationData = await eventQuery.getAllocationReport(eventId);
+      let unallocatedData = await eventQuery.getUnallocationReport(eventId);
+
       console.log('allocation data ',allocationData.rowCount)
 
       if (allocationData.rowCount > 0) {
         let file = "/data/AllocationReport.xlsx";
-        excelController.createExcel(allocationData.rows, file);
+
+        let excelJson = excel.utils.json_to_sheet(allocationData.rows);
+        let excelJson1 = excel.utils.json_to_sheet(unallocatedData.rows);
+
+        let workbook = excel.utils.book_new();
+
+        excel.utils.book_append_sheet(workbook,excelJson,'Allocated Students');
+        excel.utils.book_append_sheet(workbook,excelJson1,'Unallocated Students');
+
+        excel.writeFile(workbook,file)
 
         let filePath = path.resolve(__dirname, file);
 
